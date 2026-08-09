@@ -704,11 +704,13 @@ main:
       address:
         jpn: 0x203207C
       description: |-
-        02300000 memory is allocated dynamically
-        The memory must be initialized separately
-        
-        r0: ? (0x022A719C)
+        Locks the allocator wrapper through word +0x00, dispatches allocation through the NNS allocator object at +0x04, and returns a four-byte-aligned raw pointer. The memory must be initialized separately.
+
+        The allocator controls lifetime. In particular, 0x022A719C uses a field frame heap and cannot retain a scheduler context across heap restore/reset. The game-lifetime expandable-heap wrapper at 0x02114ABC is the persistent choice used by the deferred-process payload.
+
+        r0: lock-prefixed NNS allocator wrapper
         r1: Requested memory size
+        return: allocated address or 0
     - name: getFreeDynamicMemoryByByte
       address:
         jpn: 0x203232C
@@ -1998,3 +2000,24 @@ main:
       address:
         jpn: 0x20B18CC
       description: No-op free adapter for frame-heap allocations; individual allocations cannot be released independently.
+    - name: DeferredProcessPersistentAllocator
+      address:
+        jpn: 0x2114ABC
+      length:
+        jpn: 0x14
+      description: |-
+        Static lock-prefixed allocator wrapper accepted by std_malloc. Word +0x00 is the lock object, +0x04 points to the expandable-heap allocator table 0x020E927C, +0x08 is heap handle 0x022A39A0, and +0x0C is alignment 4.
+        Its backing NNS expandable heap is independent of the field frame heap and preserves the raw process-context pointer across repeated B handling in the user-verified test.
+    - name: DeferredProcessPersistentExpHeap
+      address:
+        jpn: 0x22A39A0
+      description: |-
+        NNS expandable-heap header used by DeferredProcessPersistentAllocator. Runtime signature is EXPH (0x45585048); the observed managed extent begins near 0x022A39E8 and reaches 0x02385EEC.
+    - name: FieldFrameHeapAllocator
+      address:
+        jpn: 0x22A719C
+      length:
+        jpn: 0x14
+      description: |-
+        Field-owned lock-prefixed NNS frame-heap allocator wrapper. Word +0x04 points to the frame-heap allocator table 0x020E9274 and +0x0C contains alignment 4.
+        Allocations are bump allocations with no individual free operation and become invalid when field allocator management restores or resets the frame heap. Do not register one of its raw pointers permanently in the OS scheduler.
