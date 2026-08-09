@@ -1881,11 +1881,12 @@ main:
       address:
         jpn: 0x20F9110
       length:
-        jpn: 0x400
+        jpn: 0x420
       description: |-
-        User-supplied safe fixed storage range for the Japanese DQVC message/ACE path: arm9:020F9110 through arm9:020F950F inclusive.
+        User-supplied approximate safe fixed range for the Japanese DQVC message plus IRQ-external ACE entry: arm9:020F9110 through arm9:020F952F inclusive (about 0x420 bytes).
 
-        Writes in this 0x400-byte range are reflected into save data. Payload code, persistent state, thread context, and any thread stack placed here must share the same strict 0x400-byte budget and must not overlap live instructions or each other.
+        Writes in this range are reflected into save data. The DQVC message, payload code, and fixed payload state share this envelope and must not overlap live instructions or each other.
+        The ACE entry executes outside IRQ and may call normal functions. Large thread context/stack storage should be heap allocated rather than placed in this fixed range.
         The other safe storage option is heap allocation, but its runtime address correspondence is fragile and is not preferred for a reusable fixed-address payload.
     - name: BT_LCG_location
       address:
@@ -1953,3 +1954,47 @@ main:
         Real-time current map ID storage for the Japanese build.
         Read as a little-endian u16. getAddrCurrentFieldId at 0x02012DAC returns this address, and FUN_0201BD4C consumes it with LDRH.
         Runtime value at the supplied ending-adjacent State, frame 3586, was 0x1193. Earlier trigger-wrapper stack observations carried map IDs 0x1133 and 0x1193; these values are not event IDs.
+    - name: NNS_FndAllocFromExpHeapEx
+      address:
+        jpn: 0x20B1214
+      description: |-
+        Allocates from an NNS expandable heap with explicit alignment. Positive alignment selects the head-side search and negative alignment selects the tail-side search.
+
+        r0: expandable heap handle
+        r1: requested size
+        r2: signed alignment
+        return: allocated address or 0
+    - name: NNS_FndFreeToExpHeap
+      address:
+        jpn: 0x20B1244
+      description: |-
+        Returns an allocation to an NNS expandable heap and coalesces the resulting free range.
+
+        r0: expandable heap handle
+        r1: allocated address
+    - name: NNS_FndAllocFromFrmHeapEx
+      address:
+        jpn: 0x20B1484
+      description: |-
+        Allocates from an NNS frame heap with explicit alignment. Positive alignment advances the head watermark; negative alignment retreats the tail watermark. The returned address is not independently freeable and remains valid only until the owning frame heap is restored or reset.
+
+        r0: frame heap handle
+        r1: requested size
+        r2: signed alignment
+        return: allocated address or 0
+    - name: AllocatorAllocForExpHeap
+      address:
+        jpn: 0x20B1894
+      description: NNS allocator adapter that forwards allocation to NNS_FndAllocFromExpHeapEx using the heap handle and alignment stored in the allocator object.
+    - name: AllocatorFreeForExpHeap
+      address:
+        jpn: 0x20B18A8
+      description: NNS allocator adapter that forwards an allocated address to NNS_FndFreeToExpHeap.
+    - name: AllocatorAllocForFrmHeap
+      address:
+        jpn: 0x20B18B8
+      description: NNS allocator adapter that forwards allocation to NNS_FndAllocFromFrmHeapEx using the heap handle and alignment stored in the allocator object.
+    - name: AllocatorFreeForFrmHeap
+      address:
+        jpn: 0x20B18CC
+      description: No-op free adapter for frame-heap allocations; individual allocations cannot be released independently.
