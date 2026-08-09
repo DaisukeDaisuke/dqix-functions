@@ -790,22 +790,28 @@ main:
       address:
         jpn: 0x206577C
       description: |-
-        Checks the story flag to see if a chain event can be executed
-        
-        r0: getStoryFlagStartAddr() return
-        r1: FUN_0206577c par2 0x10
-        r2: structure on stack
+        Selects the first chain-event candidate whose selector and condition list pass.
+        Supported by static control flow and runtime entry observations from erigi_flee.dst.
+
+        r0: story/chain owner returned by getStoryFlagStartAddr() (0x02108788 in the observed JPN run)
+        r1: selector byte; observed values include 0x06, 0x0A, 0x0F, 0x14, and 0x1E
+        r2: caller-owned 0x34-byte work area passed through to each condition evaluator
+        return: selected candidate pointer, or 0 when no candidate passes
+
+        The primary list starts at r0 +0x47C. Candidate +0x06 is compared with r1, +0x08 points to a condition list, +0x10 links alternatives for the same selector, and +0x14 links selector entries. Each condition is evaluated by FUN_02060DE0.
     - name: PrepareChainEvents
       address:
         jpn: 0x2065C9C
       description: |-
-        Preprocesses chain events
-        This function is equipped with several anti-tampering guards
-        
-        r0: getStoryFlagStartAddr() return
-        r1: FUN_0206577c par2 0x10
-        r2: structure on stack 
-        return: 0x02108788
+        Selects and materializes a chain-event action list into a caller-owned work area.
+        Supported by ARM listing plus repeated runtime observations from erigi_flee.dst.
+
+        r0: story/chain owner returned by getStoryFlagStartAddr()
+        r1: selector byte
+        r2: caller-owned 0x34-byte work area
+        return: 1 when a matching candidate's action list was accepted, otherwise 0
+
+        Calls CheckStoryFlags(r0, r1, r2). On a match it clears work area +0x30, then passes candidate +0x0C through FUN_0206581C/FUN_02062EEC to materialize action nodes. A successful empty action list is possible, so return 1 does not guarantee that +0x30 is nonzero.
     - name: BinarySearchByCustomCode14
       address:
         jpn: 0x2070530
@@ -819,11 +825,13 @@ main:
       address:
         jpn: 0x20708DC
       description: |-
-        Processes chain events
-        To execute an event, a structure prepared by PrepareChainEvents is required, and arbitrary events are likely to be difficult
-        
-        r0: Event structure (initialized as FUN_020019c8(ptr,0, 0x34), etc.)
-        return are not yet understood
+        Executes the materialized action-node chain in a 0x34-byte work area.
+        Supported by static switch recovery and runtime observations from erigi_flee.dst.
+
+        r0: caller-owned 0x34-byte work area, normally zero-initialized with FUN_020019C8 and populated by PrepareChainEvents
+        return: void
+
+        Work area +0x30 is the action-node head. Each node stores the opcode in the low u16 at +0x00 and the linked-list next pointer at +0x18. The ending-adjacent selector 0x0F path produced a two-node chain at runtime with opcodes 0x77 and 0x94, independently matching cases in this function's switch. Calling this function with a raw event ID is not a valid ABI.
     - name: getBTAddress
       address:
         jpn: 0x207535C
@@ -1658,6 +1666,79 @@ main:
         jpn: 0x207AB58
       description: |-
         Returns `(header & 0xFFF) * 8`, the byte length of the companion packed record table passed in r0.
+    - name: PrepareChainEventsSelector0F
+      address:
+        jpn: 0x2065CF4
+      description: |-
+        Supported selector-specific tail-call helper for chain events.
+
+        r0: story/chain owner returned by getStoryFlagStartAddr()
+        r1: caller-owned 0x34-byte work area
+        return: the boolean result from PrepareChainEvents
+
+        Clears owner +0x498, then tail-calls PrepareChainEvents(r0, 0x0F, r1). The erigi_flee.dst replay dynamically reached this helper from overlay_d_17:021B8204 and then executed a non-empty 0x77 -> 0x94 action chain.
+    - name: PrepareChainEventsSelector10
+      address:
+        jpn: 0x2065D10
+      description: |-
+        Confidence: supported by ARM listing; this helper was not hit in the recorded erigi_flee.dst window.
+
+        r0: story/chain owner returned by getStoryFlagStartAddr()
+        r1: caller-owned 0x34-byte work area
+        return: the boolean result from PrepareChainEvents
+
+        Clears owner +0x498, then tail-calls PrepareChainEvents(r0, 0x10, r1).
+    - name: candidate_InterpretTriggerBinaryForChainEvents
+      address:
+        jpn: 0x2065860
+      description: |-
+        Confidence: supported by static control flow and three runtime entries; this is one binary-file wrapper, not the parent dispatcher for all chain events.
+
+        r0: story/chain owner
+        r1: runtime context/parser owner stored at story owner +0x480
+        r2: loaded trigger binary buffer
+        r3: trigger binary byte length
+        stack +0x00: trigger/event value stored at story owner +0x484
+        stack +0x04: value stored at story owner +0x488
+        stack +0x08: value stored at story owner +0x48C
+        return: void
+
+        Initializes a local binary-language parser, parses r2/r3, prepares selector 0x14 into a local 0x34-byte work area, and calls ProcessChainEvents when preparation succeeds. Runtime input was data/scenario/triggerX04.bin at 0x0211FB64 with length 0x0F70. Observed stack tuples were (0x1133,0x11,2), (0x1133,0x13,2), and (0x1193,0x13,2); the resulting Process action heads were zero in the observed passes.
+    - name: candidate_LoadTriggerBinaryAndProcessChainEvents
+      address:
+        jpn: 0x2065908
+      description: |-
+        Confidence: supported by static loader flow and runtime call stacks.
+
+        r0: story/chain owner
+        r1: trigger descriptor; u16 +0x00 becomes the first stack argument to candidate_InterpretTriggerBinaryForChainEvents, and three characters from +0x05 select the trigger filename suffix
+        return: 1
+
+        Clears story owner +0x47C and +0x494, constructs the trigger NitroFS path, loads the file into the shared buffer, and calls candidate_InterpretTriggerBinaryForChainEvents with the loaded pointer and length. Runtime call stacks linked it to data/scenario/triggerX04.bin.
+    - name: candidate_ParseEventListRecord
+      address:
+        jpn: 0x20724F4
+      description: |-
+        Confidence: candidate from static interpreter flow; record fields still require direct binary-to-output validation.
+
+        r0: loaded event-list binary buffer
+        r1: binary byte length
+        r2: requested global event ID
+        r3: caller-owned output structure
+        return: parser result pointer/status stored in the event-list parser context
+
+        Initializes the common binary-language parser and dispatches the event-list opcode table at 0x020F0CCC. It sets output +0x07 for IDs 0x5208..0x9C3F and output +0x08 for IDs >=0x9C40, and adjusts signed output field +0x46 by the parser's per-file base.
+    - name: candidate_LoadEventListRecordById
+      address:
+        jpn: 0x20725E0
+      description: |-
+        Confidence: supported for file routing by string xrefs and ARM listing; detailed output structure remains candidate.
+
+        r0: global event ID
+        r1: caller-owned output structure
+        return: r1 on successful file load and record parse, otherwise 0
+
+        Routes IDs below 0x5208 to data/event/eventlist6.bin, IDs 0x5208..0x9C3F to data/evspt_lv5/eventlist_lv5.bin, and IDs >=0x9C40 to data/event/evl_quest.bin. Each file is loaded into the shared buffer at 0x0211FB64 and passed with its byte length, requested ID, and output pointer to candidate_ParseEventListRecord.
   data:
     - name: AT_LCG_Location
       address:
@@ -1799,3 +1880,12 @@ main:
         Word +0x00 was 7 for top/action/skill/spell selection screens, 0x13 for target selection, and 8 during queued action/animation.
         Word +0x04 was 4 on selection screens, 0 for target selection, and changed among 1, 2, 3, and 6 during animation.
         The next selectable turn returned to 7/4. Pair this with battle owner state-stack state 1 before declaring the next top menu ready.
+    - name: CurrentMapId
+      address:
+        jpn: 0x20FB11C
+      length:
+        jpn: 0x2
+      description: |-
+        Real-time current map ID storage for the Japanese build.
+        Read as a little-endian u16. getAddrCurrentFieldId at 0x02012DAC returns this address, and FUN_0201BD4C consumes it with LDRH.
+        Runtime value at the supplied ending-adjacent State, frame 3586, was 0x1193. Earlier trigger-wrapper stack observations carried map IDs 0x1133 and 0x1193; these values are not event IDs.

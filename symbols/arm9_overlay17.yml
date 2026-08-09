@@ -1,0 +1,61 @@
+main:
+  versions:
+    - jpn
+  address:
+    jpn: 0x218C1C0
+  length:
+    jpn: 0x4C9E0
+  description: |-
+    DQ9 Japanese field/event overlay 17.
+    Qualified Ghidra address space: overlay_d_17. Runtime range 0x0218C1C0..0x021D8B9F.
+    GameMain fixes overlay ID 17 in overlay slot ID 2 at 0x0218C1C0 and normally does not unload it. This was also observed with script/dqix/overlay_jp.js after recent-State reload serial 3.
+    Loaded-overlay table slot 2 is main 0x01FFD386 and contains 17. GameMain ACE may treat residency as invariant or use that byte as a defensive check; naked runtime addresses remain invalid outside the overlay's lifetime.
+  functions:
+    - name: candidate_StartFieldEventById
+      address:
+        jpn: 0x21A0738
+      description: |-
+        Qualified identity: overlay_d_17:021A0738.
+        Supported high-level field-event start entry for the Japanese build. Loads the matching eventlist record through main 0x020725E0, checks the record's completion/story bit, initializes or reuses the overlay event object, stores the event ID at object +0x08, queues it, and marks it pending.
+
+        r0: field-context value forwarded by normal caller overlay_d_17:0219EE70; unused by this exact Japanese implementation
+        r1: u16 global event ID; this is not map ID 0x1133/0x1193 (the real-time current map ID is main data 0x020FB11C)
+        returns: 1 when the normal event object was scheduled; 0 when the record was absent or its completion bit was already set
+
+        On the failure path it separately tries main selector-3 PrepareChainEvents and may call main ProcessChainEvents, while still returning 0. Therefore return 0 is not a side-effect-free invalid-ID result.
+        Completion guard: main 0x0206F104 tests bit (sign16(eventlist output +0x46) + 0x38E) in story owner +0x8C. A record value of -1 still checks bit 0x38D. A set bit blocks the normal start path. main 0x0206F0C0(owner, owner +0x8C, bit, 0) clears the targeted bit before this call.
+        Normal direct call sites are overlay_d_17:0219FD00 and overlay_d_17:0219FDF4. Runtime residency is confirmed for the supplied State; the ABI/control flow are statically supported and have not been tested by injecting an arbitrary event call.
+    - name: candidate_InitializeFieldEventObject
+      address:
+        jpn: 0x21BB4D4
+      description: |-
+        Qualified identity: overlay_d_17:021BB4D4.
+        Initializes the overlay-17 field-event object used by candidate_StartFieldEventById.
+
+        r0: event object pointer, at least 0x1C4 bytes by observed initialized fields
+        r1: initialization mode; the normal event-ID start path passes 1
+        returns: void
+
+        Clears the embedded event-record area at object +0x0C for 0x68 bytes and initializes state fields through +0x1C3.
+    - name: candidate_MarkFieldEventPending
+      address:
+        jpn: 0x21BD990
+      description: |-
+        Qualified identity: overlay_d_17:021BD990.
+        r0: overlay-17 field-event object
+        side effect: writes byte 1 at object +0x104
+        returns: void
+    - name: candidate_FieldStateUpdateWithStoredEventDispatch
+      address:
+        jpn: 0x219EE70
+      description: |-
+        Qualified identity: overlay_d_17:0219EE70.
+        Large field-state update function containing the two normal direct call sites for candidate_StartFieldEventById. The broader state-machine role remains candidate; the register formation below is supported by exact listing and decompile agreement.
+
+        r0: field-context/state pointer; saved in r9 at overlay_d_17:0219EE78 and forwarded unchanged to candidate_StartFieldEventById
+        r1-r3: not established by this bounded analysis
+        returns: void
+
+        main 0x0200FB68(dynamicBase) returns dynamicBase +0x3F8. At overlay_d_17:0219FCF8-0219FD00 this function loads r1 from that record +0x20 (dynamicBase +0x418), restores r0 from r9, and calls overlay_d_17:021A0738. At overlay_d_17:0219FDE4-0219FDF4 it loads r1 from record +0x24 (dynamicBase +0x41C), requires the signed value to be nonnegative, restores r0 from r9, and makes the same call.
+        The loaded values are global event IDs consumed as u16 by the callee. They are distinct from current map ID values such as 0x1133/0x1193 stored at main 0x020FB11C.
+  data: []
