@@ -2021,3 +2021,151 @@ main:
       description: |-
         Field-owned lock-prefixed NNS frame-heap allocator wrapper. Word +0x04 points to the frame-heap allocator table 0x020E9274 and +0x0C contains alignment 4.
         Allocations are bump allocations with no individual free operation and become invalid when field allocator management restores or resets the frame heap. Do not register one of its raw pointers permanently in the OS scheduler.
+    - name: DqvcDeferredCreateWorker
+      address:
+        jpn: 0x20F9128
+      description: Current arm9.list label create_worker. Allocates the persistent EXPH block, copies the IRQ/worker image, installs the IRQ entry, creates the worker process, and wakes it.
+    - name: DqvcDeferredAceReturnRestore
+      address:
+        jpn: 0x20F91B4
+      description: Current arm9.list label end4. Restores the original DQVC ACE caller register set and returns through its saved PC.
+    - name: DqvcDeferredIrqDisplayEntry
+      address:
+        jpn: 0x20F91D0
+      description: |-
+        Current arm9.list aliases worker_image_start and irq_display_entry. This is copied to persistentHeap+0x8C0 and installed at 0x027E3FFC.
+        It skips custom rendering when VCOUNT is below 192 and otherwise performs the VBlank display refresh before chaining to 0x01FF8000.
+    - name: DqvcDeferredWaitVeneer
+      address:
+        jpn: 0x20F91EC
+      description: Current arm9.list label worker_call_wait. Position-independent copied-image veneer for arm9:020C960C.
+    - name: DqvcDeferredLookupVeneer
+      address:
+        jpn: 0x20F91F0
+      description: Current arm9.list label worker_call_lookup. Position-independent copied-image veneer for arm9:020725E0.
+    - name: DqvcDeferredOwnerVeneer
+      address:
+        jpn: 0x20F91F4
+      description: Current arm9.list label worker_call_owner. Position-independent copied-image veneer for arm9:0205FF20.
+    - name: DqvcDeferredGuardVeneer
+      address:
+        jpn: 0x20F91F8
+      description: Current arm9.list label worker_call_guard. Position-independent copied-image veneer for arm9:0206F0C0.
+    - name: DqvcDeferredScheduleVeneer
+      address:
+        jpn: 0x20F91FC
+      description: Current arm9.list label worker_call_schedule. Position-independent copied-image veneer for overlay_d_17:021A0738.
+    - name: DqvcDeferredWorkerEntry
+      address:
+        jpn: 0x20F9200
+      description: Current arm9.list label worker_entry. Its copied runtime address is persistentHeap+0x8F0.
+    - name: DqvcDeferredDisplayOn
+      address:
+        jpn: 0x20F9218
+      description: Current arm9.list label display_on. IRQ-only BG2, palette, glyph, event-ID, and cursor refresh path.
+    - name: DqvcDeferredWorkerLoop
+      address:
+        jpn: 0x20F9290
+      description: Current arm9.list label worker_loop. Normal-process KEYINPUT edge handling and explicit Select scheduling path; it performs no BG or VRAM display writes.
+    - name: DqvcDeferredCheckCursorLeft
+      address:
+        jpn: 0x20F92B0
+      description: Current arm9.list label check_cursor_left.
+    - name: DqvcDeferredCheckCursorRight
+      address:
+        jpn: 0x20F92BC
+      description: Current arm9.list label check_cursor_right.
+    - name: DqvcDeferredCheckSelect
+      address:
+        jpn: 0x20F9310
+      description: Current arm9.list label check_select. Select remains the explicit event trigger and is gated on overlay 17 residency.
+    - name: DqvcDeferredWorkerDone
+      address:
+        jpn: 0x20F9390
+      description: Current arm9.list label worker_done. Returns into the process creator's termination trampoline after successful scheduling.
+    - name: DqvcDeferredEventNotFound
+      address:
+        jpn: 0x20F9394
+      description: Current arm9.list label event_not_found. Releases the temporary lookup buffer and returns to worker sleep.
+    - name: DqvcDeferredIrqDrawEventId
+      address:
+        jpn: 0x20F939C
+      description: Current arm9.list label irq_draw_event_id. Draws the four hexadecimal event-ID digits and active cursor digit during the IRQ display path.
+    - name: DqvcDeferredIrqDisplayExit
+      address:
+        jpn: 0x20F93C0
+      description: Current arm9.list label irq_display_exit. Restores the full IRQ register frame and chains to original dispatcher 0x01FF8000.
+    - name: DqvcDeferredWorkerSleep
+      address:
+        jpn: 0x20F93D0
+      description: Current arm9.list label worker_sleep. Calls arm9:020C960C with 16 ms from the normal worker process and loops.
+    - name: DqvcDeferredDrawHex4
+      address:
+        jpn: 0x20F93E4
+      description: Current arm9.list label draw_hex4. Writes four hexadecimal glyph tile indices to the supplied BG map destination.
+    - name: DqvcDeferredConvertGlyphs
+      address:
+        jpn: 0x20F940C
+      description: Current arm9.list label convert_glyphs. Converts the built-in digit bitmaps into BG tile data during VBlank.
+    - name: DqvcDeferredSelectedEventId
+      address:
+        jpn: 0x20F94E4
+      length:
+        jpn: 0x4
+      description: Current arm9.list label selected_event_id. The low halfword is the selected global event ID; the whole word is copied to persistentHeap+0xBD4.
+    - name: DqvcDeferredPreviousKeys
+      address:
+        jpn: 0x20F94E8
+      length:
+        jpn: 0x4
+      description: Current arm9.list label prev_keys used for active-low KEYINPUT edge detection; copied to persistentHeap+0xBD8.
+    - name: DqvcDeferredSelectedDigit
+      address:
+        jpn: 0x20F94EC
+      length:
+        jpn: 0x4
+      description: Current arm9.list label selected_digit. Its low byte is the active hexadecimal cursor index; copied to persistentHeap+0xBDC.
+    - name: DqvcDeferredAceRestoreR4ToR7
+      address:
+        jpn: 0x20F94F0
+      length:
+        jpn: 0x10
+      description: Current arm9.list label r4s and the end of the copied worker image. Fixed ACE caller restore words for r4-r7.
+    - name: DqvcDeferredAceRestoreR9
+      address:
+        jpn: 0x20F9500
+      length:
+        jpn: 0x4
+      description: Current arm9.list label r9s.
+    - name: DqvcDeferredAceRestoreR11
+      address:
+        jpn: 0x20F9504
+      length:
+        jpn: 0x4
+      description: Current arm9.list label r11s.
+    - name: DqvcDeferredAceRestoreSpLrPc
+      address:
+        jpn: 0x20F9508
+      length:
+        jpn: 0xC
+      description: Current arm9.list label rsps. Fixed ACE caller restore words for SP, LR, and PC.
+    - name: DqvcDeferredAceEntry
+      address:
+        jpn: 0x20F9110
+      description: Current arm9.list labels func and pad at payload offset 0. This aliases the beginning of DqvcMessageSaveBackedBuffer.
+    - name: DqvcDeferredHexLoop
+      address:
+        jpn: 0x20F93F0
+      description: Current arm9.list label hex_loop inside DqvcDeferredDrawHex4.
+    - name: DqvcDeferredBlankTileLoop
+      address:
+        jpn: 0x20F9420
+      description: Current arm9.list label blank_loop inside DqvcDeferredConvertGlyphs.
+    - name: DqvcDeferredGlyphLoop
+      address:
+        jpn: 0x20F9430
+      description: Current arm9.list label glyph_loop inside DqvcDeferredConvertGlyphs.
+    - name: DqvcDeferredGlyphRowLoop
+      address:
+        jpn: 0x20F9444
+      description: Current arm9.list label row_loop inside DqvcDeferredConvertGlyphs.
