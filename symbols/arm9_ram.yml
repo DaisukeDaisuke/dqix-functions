@@ -1312,15 +1312,38 @@ main:
     - name: SwitchProcesses
       address:
         jpn: 0x20C8E60
-      description: unknown
+      description: |-
+        Selects another runnable ARM9 thread context and transfers to arm9:020C984C to restore it.
+
+        Runtime with skip IRQ disabled observed the path arm9:020C93A0 -> arm9:020C8E60 -> arm9:020C984C while the current field thread was sleeping/yielding.
+        confidence: supported by static decompile/listing and runtime call stack
+    - name: candidate_CreateThreadContext
+      address:
+        jpn: 0x20C9080
+      description: |-
+        Confidence: supported by static decompile/listing and the ordinary caller at arm9:020C0DC4.
+
+        Creates and registers an ARM9 thread/process context, but does not make it runnable by itself. The normal caller at arm9:020C0DC4 follows it with arm9:020C941C.
+        It initializes scheduler linkage/state, stack bounds and canaries, calls arm9:020C977C to prepare the saved register context, and installs arm9:020C917C as the return/termination trampoline.
+
+        r0: persistent thread context, at least 0xB4 bytes
+        r1: entry function
+        r2: entry argument
+        r3: stack top
+        [sp+0x00]: stack size in bytes
+        [sp+0x04]: scheduler priority
+        returns: no meaningful value established
     - name: AsyncProcessTerminationEntryPoint
       address:
         jpn: 0x20C917C
       description: |-
-        Handles asynchronous process termination and switching
-        
-        No argument
-        No returns
+        Thread-entry return/termination trampoline installed by arm9:020C9080.
+
+        It disables interrupts, obtains the current thread context from scheduler field +0x28, and calls arm9:020C919C(currentContext, 0), which terminates/switches away from the current context.
+        A thread entry created through arm9:020C9080 may return normally to reach this trampoline.
+
+        no arguments
+        ordinary path does not return to the terminated entry
     - name: SwitchProcessesHigherHandler
       address:
         jpn: 0x20C9230
@@ -1332,16 +1355,43 @@ main:
         unknown
         
         r0+0x9c: data to send
+    - name: candidate_WakeThreadDirect
+      address:
+        jpn: 0x20C941C
+      description: |-
+        Confidence: supported by static decompile/listing and the create-then-wake sequence at arm9:020C0DC4.
+
+        Disables interrupts, writes runnable state 1 to thread context +0x64, invokes SwitchProcesses, then restores the prior interrupt state.
+        Use after candidate_CreateThreadContext has completely initialized the persistent context and stack.
+
+        r0: thread context created by arm9:020C9080
+        returns: no meaningful value established
     - name: WaitForMs
       address:
         jpn: 0x20C960C
       description: |-
+        Synchronous delay for the current thread. It creates an alarm on the caller's stack and sleeps through arm9:020C9364 until the alarm callback clears a local wait value.
+
+        This is not a deferred normal-frame callback API and is not an IRQ-to-thread bridge. Calling it from IRQ would wait inside IRQ.
+
         r0: ms
-        unknown returns
+        returns: no meaningful value established
     - name: Wait_for_interrupt2
       address:
         jpn: 0x20C96FC
       description: nope
+    - name: candidate_InitializeThreadContext
+      address:
+        jpn: 0x20C977C
+      description: |-
+        Confidence: supported by static decompile/listing and callers arm9:020C9080 and arm9:020C919C.
+
+        Initializes the saved ARM register context used by the thread scheduler. It records entry+4 at context +0x40, stackTop at +0x44, an aligned initial SP at +0x38, saved CPSR 0x1F for ARM or 0x3F for Thumb, and clears the remaining saved registers.
+        It does not enqueue or wake the context by itself.
+
+        r0: thread context
+        r1: entry function
+        r2: stack top used to derive the initial SP
     - name: BackupRegisters
       address:
         jpn: 0x20C9800
@@ -1353,9 +1403,13 @@ main:
       address:
         jpn: 0x20C984C
       description: |-
-        This is the entry point for forking the process.
-        r0: Unknown structure pointer addr
-        returns: Never Return
+        Historical name; this is a prepared thread-context restore/resume entry, not the thread creator.
+
+        It invokes the context hook at +0x48, switches through supervisor mode, restores SPSR, SP, LR, and general registers from the supplied context, and transfers execution with `subs pc, lr, #4`.
+        Direct callers are SwitchProcesses at arm9:020C8E60 and arm9:020C919C. A runtime breakpoint with skip IRQ disabled observed arm9:020C93A0 -> arm9:020C8E60 -> arm9:020C984C during a sleep/yield switch.
+
+        r0: fully prepared thread context
+        returns: does not return to its direct caller in the ordinary context-switch path
     - name: MakeUnusableDataCacheByAddr
       address:
         jpn: 0x20C9D84
@@ -1823,6 +1877,16 @@ main:
       description: |-
         Sparse 100-entry u32 pickup timer table addressed as base+areaIndex*4.
         Low 9 bits are remaining counts and one count is 60.0 game seconds. For example, area 5 is 0x020F8E68 and reloads to 30; area 18 is 0x020F8E9C and reloads to 360.
+    - name: DqvcMessageSaveBackedBuffer
+      address:
+        jpn: 0x20F9110
+      length:
+        jpn: 0x400
+      description: |-
+        User-supplied safe fixed storage range for the Japanese DQVC message/ACE path: arm9:020F9110 through arm9:020F950F inclusive.
+
+        Writes in this 0x400-byte range are reflected into save data. Payload code, persistent state, thread context, and any thread stack placed here must share the same strict 0x400-byte budget and must not overlap live instructions or each other.
+        The other safe storage option is heap allocation, but its runtime address correspondence is fragile and is not preferred for a reusable fixed-address payload.
     - name: BT_LCG_location
       address:
         jpn: 0x2108D20
