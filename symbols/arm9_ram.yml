@@ -706,9 +706,22 @@ main:
       description: |-
         Locks the allocator wrapper through word +0x00, dispatches allocation through the NNS allocator object at +0x04, and returns a four-byte-aligned raw pointer. The memory must be initialized separately.
 
-        The allocator controls lifetime. In particular, 0x022A719C uses a field frame heap and cannot retain a scheduler context across heap restore/reset. The game-lifetime expandable-heap wrapper at 0x02114ABC is the persistent choice used by the deferred-process payload.
+        The allocator controls lifetime. In particular, 0x022A719C uses a field frame heap and cannot retain a scheduler context across heap restore/reset.
+
+        0x02114ABC is not a dedicated payload/persistent heap. It is the lock-prefixed wrapper for the ARM9 root/main expandable heap used by normal game systems, including field/event work. Its allocator object stores alignment +4, so allocation uses the head-side ExpHeap search. A user runtime isolate on 2026-08-10 showed that leaving even a one-byte std_malloc allocation outstanding from this wrapper was sufficient to make normal non-cheat event triggers crash. Do not treat this wrapper as safe game-lifetime storage for injected code without further runtime proof.
 
         r0: lock-prefixed NNS allocator wrapper
+        r1: Requested memory size
+        return: allocated address or 0
+    - name: std_malloc_tail
+      address:
+        jpn: 0x20320BC
+      description: |-
+        Alternate expandable-heap allocation path used by the game for tail-side allocations. For an expandable-heap allocator it calls NNS_FndAllocFromExpHeapEx with signed alignment -4, selecting the opposite end from the normal +4 std_malloc path.
+
+        This is a real game-used path rather than a payload-specific workaround. Overlay 28 function 0x021D9404 uses it for 0xA000-byte and 0x5000-byte allocations before building child working storage. Whether a long-lived injected allocation from the 0x02114ABC root/main allocator is safe through this tail path is not yet runtime-confirmed.
+
+        r0: allocator wrapper/object accepted by this allocation path
         r1: Requested memory size
         return: allocated address or 0
     - name: getFreeDynamicMemoryByByte
@@ -2006,13 +2019,16 @@ main:
       length:
         jpn: 0x14
       description: |-
-        Static lock-prefixed allocator wrapper accepted by std_malloc. Word +0x00 is the lock object, +0x04 points to the expandable-heap allocator table 0x020E927C, +0x08 is heap handle 0x022A39A0, and +0x0C is alignment 4.
-        Its backing NNS expandable heap is independent of the field frame heap and preserves the raw process-context pointer across repeated B handling in the user-verified test.
+        Historical payload-oriented name. This is actually the lock-prefixed wrapper for the ARM9 root/main expandable heap, not a dedicated deferred-process or payload heap.
+        Word +0x00 is the lock object, +0x04 points to the expandable-heap allocator table 0x020E927C, +0x08 is heap handle 0x022A39A0, and +0x0C is alignment +4. The +4 alignment makes the normal allocator adapter search from the head side of the ExpHeap.
+        Startup function 0x02012AE0 builds the backing ExpHeap from the remaining ARM9 OS arena and initializes its allocator object. Normal game code subsequently uses this same parent heap to obtain working/child-heap backing storage; it is therefore not independent of field/event memory planning.
+        Earlier testing established only that moving the deferred process away from the field FRMH avoided the immediate stale-pointer overwrite. A stronger 2026-08-10 isolate, containing only std_malloc(this, 1) followed by return to the ACE caller, made normal non-cheat event triggers crash. Therefore this wrapper must not currently be considered safe for an outstanding game-lifetime payload allocation.
     - name: DeferredProcessPersistentExpHeap
       address:
         jpn: 0x22A39A0
       description: |-
-        NNS expandable-heap header used by DeferredProcessPersistentAllocator. Runtime signature is EXPH (0x45585048); the observed managed extent begins near 0x022A39E8 and reaches 0x02385EEC.
+        NNS expandable-heap header backing the ARM9 root/main allocator wrapper at 0x02114ABC. Historical DeferredProcessPersistentExpHeap naming should not be interpreted as ownership by the deferred-process payload.
+        Runtime signature is EXPH (0x45585048); the observed managed extent begins near 0x022A39E8 and reaches 0x02385EEC. Startup 0x02012AE0 creates this heap from the remaining ARM9 OS arena. Field/event code uses allocations derived from this parent heap, including large temporary child-heap backing allocations, so persistent injected allocations can perturb normal game memory layout.
     - name: FieldFrameHeapAllocator
       address:
         jpn: 0x22A719C
