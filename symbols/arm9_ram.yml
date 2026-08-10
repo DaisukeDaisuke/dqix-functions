@@ -1979,6 +1979,8 @@ main:
       description: |-
         Allocates from an NNS expandable heap with explicit alignment. Positive alignment selects the head-side search and negative alignment selects the tail-side search.
 
+        Runtime verification on 2026-08-10 with desmume-state (11).dst directly called this function with r0=0x022A39A0, r1=0x2000, r2=-4. It returned 0x023B8F10. getFreeDynamicMemoryByByte on the root wrapper changed from 0x5814 before allocation to 0x3804 after allocation, a 0x2010 decrease matching a 0x2000 payload plus the 0x10 ExpHeap block header. This confirms that direct negative-alignment allocation from the root ExpHeap is a functioning tail-side path independent of alloc_from_typed_heap_tail.
+
         r0: expandable heap handle
         r1: requested size
         r2: signed alignment
@@ -2017,6 +2019,14 @@ main:
       address:
         jpn: 0x20B18CC
       description: No-op free adapter for frame-heap allocations; individual allocations cannot be released independently.
+    - name: RootMainExpHeapAllocatorTable
+      address:
+        jpn: 0x20E927C
+      length:
+        jpn: 0x8
+      description: |-
+        Fixed NNS allocator function table used by the ARM9 root/main ExpHeap wrapper at 0x02114ABC. Allocation dispatches to AllocatorAllocForExpHeap at 0x020B1894 and free dispatches to AllocatorFreeForExpHeap at 0x020B18A8.
+        The wrapper stores this table at +0x04, backing ExpHeap handle 0x022A39A0 at +0x08, and default alignment +4 at +0x0C.
     - name: DeferredProcessPersistentAllocator
       address:
         jpn: 0x2114ABC
@@ -2033,6 +2043,8 @@ main:
       description: |-
         NNS expandable-heap header backing the ARM9 root/main allocator wrapper at 0x02114ABC. Historical DeferredProcessPersistentExpHeap naming should not be interpreted as ownership by the deferred-process payload.
         Runtime signature is EXPH (0x45585048); the observed managed extent begins near 0x022A39E8 and reaches 0x02385EEC. Startup 0x02012AE0 creates this heap from the remaining ARM9 OS arena. Field/event code uses allocations derived from this parent heap, including large temporary child-heap backing allocations, so persistent injected allocations can perturb normal game memory layout.
+        In desmume-state (11).dst on 2026-08-10 the free list contained one observed block at 0x023B56EC with size 0x5814. Its lower adjacent used block began at 0x02385EDC with payload size 0x2F800; that payload begins at 0x02385EEC with FRMH signature, showing a large child FrameHeap immediately below the free range. The upper adjacent used block began at 0x023BAF10 with payload size 0x250E0 and extended to the observed heap end 0x023E0000. These 0x023Bxxxx addresses describe that State's runtime layout and are not fixed globals.
+        A direct 0x2000-byte allocation through NNS_FndAllocFromExpHeapEx(heap, size, -4) returned 0x023B8F10 and preserved the low-address boundary next to the child FRMH. This provides a concrete mechanism by which normal +4 head-side injected allocations can interfere with later coalescing while a tail-side allocation may avoid disturbing that lower boundary; long-lived tail allocation safety through all events/endings remains runtime-unproven.
     - name: FieldFrameHeapAllocator
       address:
         jpn: 0x22A719C
