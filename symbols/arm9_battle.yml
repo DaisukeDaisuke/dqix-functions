@@ -177,20 +177,51 @@ main:
       address:
         jpn: 0x208A930
       description: |-
-        Check if the enemy can take the action
-        selectAIActions > (code) r6 > movementPattern > isCanActionTaken
-        
-        arguments are not yet understood
-        return: If it's 0, the enemy has trouble taking the action. If it's 1, the enemy can take the action
+        Validate one of the six enemy-AI action slots and build its targets.
+
+        r0: AiSelector*; +0x00 is the battle/BT pointer.
+        r1: uint8 action slot, 0..5.
+        r2: int16 dynamic actor index.
+        r3: uint32* out target count.
+        stack +0x00: int16* out target indices.
+        return: bool; 1 when the slot can produce a usable action and targets, otherwise 0.
+
+        actor = getDynamicAllocatedMemAddrFromIndex(root, r2).
+        actor +0x02: special-field enemy ID.
+        actor +0x138: live combat record pointer; +0x02 current MP, +0x14 status flags, +0x3c judgment-1 resource-check bits.
+        actor +0x148: AI record pointer; +0x10 contains judgment, scheme, and limited-slot bits; +0x18 is uint16 actions[6].
+        actor +0x17c: encounter-group index. Identical species in separate displayed groups have different indices.
+
+        Rejection order is: battle-state-specific Flee (action 0x00e1) suppression; already-used limited slot; locked legacy-boss level action; judgment-dependent status/MP check; action-specific target/availability handler returning zero.
+        Limited slots are bits 20..25 of AI record +0x10. Used bits are stored per encounter group at battle +0x81bf + groupIndex*0x18, so the restriction is attached to the slot rather than the species or action ID.
+        Judgment is bits 3..4 of AI record +0x10. Value 0 skips the MP gate, value 1 uses combat +0x3c category bits 3/4/5, and value 2 always applies the gate. Cost is the low byte of attack record +0x08: 0 is free, 1..254 require currentMP >= cost, and 0xff requires nonzero MP. Attack availability flag bit 0 also rejects combat status bit 0x100 when its gate applies.
+        Target/availability dispatch goes through overlay_d_24:021f6e98 and may write r3/stack-output data. Nonzero means the action-specific handler accepted the action; target count may validly be zero (observed for Bounce). On success it records the slot as used. Attack operation type 0x22 is an internal unlimited slot/table switch: it clears the group used-slot byte, applies attack record +0x30 as the active boss/AI table ID at combat record +0x36, and selects again in the same turn. Corvus 2A->2C was observed as 0x0140/AI 0x0235f68c -> active table 0x02f1/AI 0x0235f794.
+
+        Confidence: supported by the full ARM listing, caller paths, target-dispatch listing, local bestiary/action data, and validated legacy-boss reports. User-facing names of the three raw availability categories remain unknown.
     - name: movementPattern
       address:
         jpn: 0x208AC64
       description: |-
-        Process enemy behavior patterns.
-        Called only for random actions, not if the action is program controlled. (probably)
-        
-        arguments are not yet understood
-        return are not yet understood
+        Shared six-slot weighted selector used by AI schemes 0, 1, 2, and 4.
+
+        r0: AiSelector*; +0x00 is the battle/BT pointer used by RandInt.
+        r1: weight profile, 0..3.
+        r2: int16 dynamic actor index.
+        r3: uint32* out target count.
+        stack +0x00: int16* out target indices.
+        return: uint16 selected action ID.
+
+        The four profile rows at 0x020e8dc6 are:
+        profile 0: 43,42,43,43,42,43
+        profile 1: 68,58,48,38,27,17
+        profile 2: 210,29,10,4,2,1
+        profile 3: 70,70,70,16,15,15
+        Every row totals 256. The function consumes one RandInt(battle, 256), converts it to 1..256, and performs a cumulative slot draw.
+
+        It calls isCanActionTaken for the drawn slot. If unusable, it does not reroll or renormalize: it tests selected-1 down to slot 0, then selected+1 up to slot 5. The first usable slot supplies uint16 AIRecord.actions[slot] from AI record +0x18.
+        If all six slots are unusable, it clears *outTargetCount, builds targets for fallback action 2 through overlay_d_00:02156184, stores the returned target count, and returns action ID 2.
+
+        Confidence: supported by the full ARM listing, the four wrapper call sites, the function table at 0x020f11c4, and the validated all-monster/legacy-boss reports.
     - name: ProcessAIScheme0
       address:
         jpn: 0x208ADA0
@@ -267,11 +298,19 @@ main:
       address:
         jpn: 0x208B210
       description: |-
-        Select a random action for the AI that is not a rotary table
-        calls movementPattern
-        
-        arguments are not yet understood
-        return: selected action id
+        Dispatch enemy action selection through AI scheme 0..7.
+
+        r0: AiSelector*; the function stores r1 at +0x00.
+        r1: battle/BT pointer.
+        r2: int16 dynamic actor index.
+        r3: uint32* out target count.
+        stack +0x00: int16* out target indices.
+        return: uint16 selected action ID.
+
+        Scheme is bits 5..7 of actor AI record +0x10. The eight-entry direct member-function table at 0x020f11c4 maps schemes 0..7 to ProcessAIScheme0, 1, 2, 3, 4, 5, 6, and 7. Schemes 0/1/2/4 reach movementPattern through wrappers; selectAIActions does not call movementPattern directly. The other schemes implement their own stateful selectors but still call isCanActionTaken.
+        The scheme field is three bits, so the defensive >=8 fallback is unreachable for a valid uint32 extraction. If reached, the function clears/builds targets for fallback action 2 through overlay_d_00:02156184 and returns 2.
+
+        Confidence: supported by the full ARM listing, table bytes, all eight handlers, and validated all-monster reports.
     - name: __Vector3_Operator_+
       address:
         jpn: 0x20C485C
@@ -479,6 +518,21 @@ main:
         r0: 0x02385F0C Ct Addr, unused
         r1: 0xC0, technique id or enemy id?
         r2: 2, amount of hp to increase
+    - name: resetEnemyAiTurnState
+      address:
+        jpn: 0x215ED08
+      description: |-
+        Reset per-turn enemy AI state before action selection.
+
+        Qualified identity: overlay_d_00:0215ed08.
+        r0: battle/BT pointer.
+        r1-r3/stack: not used by the confirmed encounter-group reset loop; remaining helper-call ABI is not fully named.
+        return: void.
+
+        0215ed18..0215ed3c loops encounter group indices 0..2 and writes zero at battle +0x81bf + groupIndex*0x18. DeSmuME write hooks observed 0215ed30 clearing groups 0, 1, and 2 before selection. Later isCanActionTaken success at 0208ac54 accumulates the selected slot bits for the turn.
+        The function also calls 0215e810 and applies 0208a078 to the selected active actors' live combat records; those additional per-actor fields remain unnamed.
+
+        Confidence: confirmed for encounter-group used-slot reset by matching ARM and two baseline-repeated runtime runs; supported for the broader per-actor turn-state reset purpose.
     - name: ProcessesTurn
       address:
         jpn: 0x215EDBC
