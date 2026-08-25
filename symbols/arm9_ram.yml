@@ -1815,8 +1815,6 @@ main:
     - name: FUN_overlay_d_00__0216fda4
       address:
         jpn: 0x216FDA4
-      length:
-        jpn: 0x388
       description: |-
         Builds the optional free-camera shot used by battle actions. Qualified identity: overlay_d_00:0216fda4.
         Full ARM body is 0x0216FDA4..0x02170128. Confirmed by live overlay 0 disassembly and two buruda-ga State hits.
