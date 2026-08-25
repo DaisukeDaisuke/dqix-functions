@@ -1812,6 +1812,182 @@ main:
         return: r1 on successful file load and record parse, otherwise 0
 
         Routes IDs below 0x5208 to data/event/eventlist6.bin, IDs 0x5208..0x9C3F to data/evspt_lv5/eventlist_lv5.bin, and IDs >=0x9C40 to data/event/evl_quest.bin. Each file is loaded into the shared buffer at 0x0211FB64 and passed with its byte length, requested ID, and output pointer to candidate_ParseEventListRecord.
+    - name: FUN_overlay_d_00__0216fda4
+      address:
+        jpn: 0x216FDA4
+      length:
+        jpn: 0x388
+      description: |-
+        Builds the optional free-camera shot used by battle actions. Qualified identity: overlay_d_00:0216fda4.
+        Full ARM body is 0x0216FDA4..0x02170128. Confirmed by live overlay 0 disassembly and two buruda-ga State hits.
+
+        r0: camera/action context. The controlled one-member sample used 0x0238F954.
+        r1: first actor index. The controlled sample used 0.
+        r2: second actor index. The controlled sample used 0xC0.
+        r3: force/default-camera flag. Zero in the controlled sample.
+        return: void.
+
+        State fields used by the function include byte flags/actor indices at +0x104..+0x107, the result handle at +0x258,
+        the retry counter at +0x25C, a CT/camera RNG pointer at +0x21C, and an object passed to 02170E54 at +0x27C.
+        Camera work is cleared at 0x02185370. The function always consumes RandInt(rng, 100) and stores it at cameraWork+0.
+
+        Free-camera gating uses retryCounter = *(context+0x25C): values below 1 do not build a shot; value 5 builds directly;
+        values 1..4 build only when RandInt(rng, 5-retryCounter) returns zero. A non-build path increments retryCounter.
+        This is conditional retry scheduling, not an unconditional camera call.
+
+        The build path resolves both actor indices through read_data_limit_e9_1, rejects null actors, derives a point from their
+        position vectors, chooses one of four 12-byte candidate vectors at 0x02184370 with RandInt(rng, 4), and conditionally
+        consumes one or two getFloatRand values for angle fields. Binary32 literals used by those formulas are 0.8, 0.6, -1.8,
+        4096.0, pi, 0.7, and approximately 1.0995574. Successful construction resets retryCounter to zero, calls
+        overlay_d_00:0217093C, and stores its return at context+0x258.
+
+        Dynamic evidence: exact callback-time stack was synchronized at depth 11. One-member attack samples used
+        overlay_d_25:021DC5D4 -> overlay_d_00:0216FDA4 with LR 0x021DC5D8. A four-member healing/AI State produced two delayed
+        calls through overlay_d_25:021DC620 with actor-index pairs (1,0xC0), (0,1), and (2,0xC0); all took the non-build path and
+        incremented retryCounter to 1, 2, and 3. This confirms that the arguments are generic actor indices rather than one-member-only fields.
+        overlay_jp showed slot 3 = overlay 25 at the call, followed by overlay 25 unload and overlay 26 load into the same
+        0x021D9300 slot. Confidence is confirmed for the function boundary, direct caller identities, entry arguments, retry gate,
+        and RNG-call order; helper/field semantics remain supported.
+    - name: FUN_overlay_d_25__021dc1d4
+      address:
+        jpn: 0x21DC1D4
+      description: |-
+        Selects whether to call the battle free-camera routine and whether its fifth argument is forced mode 1 or retry mode 0.
+        Qualified identity: overlay_d_25:021dc1d4. This is a separate selector function; do not merge its predicates into the
+        context of overlay_d_00:0216fda4.
+
+        The synchronized live stack reaches this function through overlay_d_25:021DC70C. It derives attacker and target actor IDs
+        from the current action/event object and can skip the free-camera call entirely when its actor/action predicates reject it.
+        Call site overlay_d_25:021DC5D4 invokes overlay_d_00:0216FDA4(context+0xB94, attackerId, targetId, 0, 1).
+        Call site overlay_d_25:021DC620 invokes the same function with fifth argument 0.
+
+        Mode 1 is fundamentally the preemptive/first-acting free-camera path. Mode 0 is fundamentally the later-action path that
+        uses the retained counter and probability gate. One-member attack and 一閃づき samples hit mode 1; three later calls in the
+        supplied four-member healing/AI sample hit mode 0. Controller +0x57C8, enumerated actor state, target identity/overlap,
+        and overlay_d_25:021E03AC implement exceptions that may force, suppress, or reset the camera. Predicate names remain
+        supported pending stopping-breakpoint captures for herb and a genuine no-call sample.
+
+        一閃づき 0x48 uses a top-level BACT node type 0x0C with node+0x08 value 5. Because 5 !=10, this sets the suppressible
+        presentation predicate. On the normal path the target free-camera call therefore depends on FUN_0204A264(attacker), which
+        returns actor presentation object +0x34: nonzero permits the call and zero skips it. Static confidence is supported; a
+        non-call State is still required for direct dynamic confirmation.
+    - name: FUN_overlay_d_00__0216268c
+      address:
+        jpn: 0x216268C
+      description: |-
+        Returns the current 0x28-byte battle action record. Qualified identity: overlay_d_00:0216268c.
+
+        r0: battle presentation controller.
+        return: controller+0x78FC when that override pointer is nonzero; otherwise
+        controller+0x218+0x821C+(*(u32 *)(controller+0x57C8))*0x28 when controller+0x218 is nonzero; else null.
+
+        Controller +0x57C8 is therefore the current action index within the turn. Index 0 is the normal source of the
+        preemptive/first-action param5=1 free-camera path in overlay_d_25:021DC1D4.
+    - name: FUN_overlay_d_00__0216b184
+      address:
+        jpn: 0x216B184
+      description: |-
+        Searches a linked list of action-ID membership nodes. Qualified identity: overlay_d_00:0216b184.
+
+        r0: first node. Node +0x00 points to a u16 ID array, u16 +0x04 is its count, and +0x0C is the next node.
+        r1: u16 action ID to find.
+        return: the containing node, or null.
+
+        main:020498D4 uses this on actor +0x13C to decide whether the current action enters the free-camera presentation path.
+    - name: FUN_020498d4
+      address:
+        jpn: 0x20498D4
+      description: |-
+        Tests whether an actor's presentation data contains the current action ID.
+
+        r0: battle actor pointer.
+        r1: current action ID.
+        return: the membership node returned by overlay_d_00:0216B184, or null when actor +0x13C/list head is null or no ID matches.
+
+        overlay_d_25:021DC70C uses non-null as the normal prerequisite for entering the free-camera setup/selector path.
+    - name: FUN_overlay_d_25__021dcf8c
+      address:
+        jpn: 0x21DCF8C
+      description: |-
+        Processes action-specific BACT presentation data and conditionally enters the free-camera selector.
+        Qualified identity: overlay_d_25:021dcf8c.
+
+        It gets the current action record through overlay_d_00:0216268C, resolves the attack record, formats `sp%03d.bact`
+        from attackRecord+0x04 & 0xFFF, reads that member from the active skill archive, and interprets it through
+        overlay_d_00:0216E8F0. When the interpreter returns a non-null camera object it initializes controller+0x224 and calls
+        overlay_d_25:021DC1D4. A fallback also calls the selector when the action ID (or 0x158 for operation type 0x0C) is present
+        in the linked membership list at controller+0x5914.
+
+        一閃づき raw action 0x48 reaches overlay_d_25:021DC1D4 from call site 0x021DD0A8 through this function. Its fixed data is
+        `data/skill/actskl.nsarc/sp072.bact` (976 bytes, SHA-256
+        4b5fa53180f889ad2383e2a44495419d41d3b0d028a6e34d4ac8e43fec22c487).
+    - name: FUN_overlay_d_00__0216b31c
+      address:
+        jpn: 0x216B31C
+      description: |-
+        BACT opcode 0x01 callback. Qualified identity: overlay_d_00:0216b31c.
+
+        Allocates and appends one linked action-membership node to the BACT result global at 0x02185364. Explicit integer arguments
+        become its u16 IDs. When ID 1 is present, IDs 2 and 0x0DB are appended automatically. The callback returns success even for
+        zero explicit IDs, and the allocated node still makes the interpreter result non-null.
+    - name: FUN_overlay_d_00__0216bb64
+      address:
+        jpn: 0x216BB64
+      description: |-
+        BACT opcode 0x10 callback. Qualified identity: overlay_d_00:0216bb64.
+
+        Allocates and appends one linked action-membership node containing exactly `[1,2,0x0DB]`, then returns success.
+        Seven mined action-specific BACT programs begin with this opcode; the other 304 begin with opcode 0x01. Consequently all
+        311 `spNNN.bact` programs make the interpreter result non-null before later presentation instructions.
+    - name: FUN_0204a230
+      address:
+        jpn: 0x204A230
+      description: |-
+        Writes an actor's bounded presentation route.
+
+        r0: battle actor pointer; actor+0x13C is the presentation object.
+        r1: route byte source.
+        r2: route count, accepted only in 0..15.
+        return: void.
+
+        Copies the route into presentation object +0x24 and stores the count byte at +0x34. FUN_0204A264 returns that count.
+        overlay_d_25:021DC1D4 uses count !=0 as the actor-side prerequisite for suppressible free-camera presentations.
+    - name: FUN_overlay_d_25__021e0f48
+      address:
+        jpn: 0x21E0F48
+      description: |-
+        Builds per-actor presentation routes for the current turn. Qualified identity: overlay_d_25:021e0f48.
+
+        Reads controller +0x57C8 as the current action index and traverses the 0x28-byte turn action records from that index to the
+        end, then wraps through earlier records. It gathers involved actor IDs, searches presentation-node paths with
+        overlay_d_00:02171498, retains up to 16 usable steps per actor, and commits each route through main:0204A230.
+
+        The resulting actor presentation object +0x34 count is consumed by overlay_d_25:021DC1D4. Thus free-camera call/no-call for
+        suppressible BACT actions such as 一閃づき depends on the whole turn action order and route graph, not the raw technique ID alone.
+    - name: FUN_overlay_d_00__02170f58
+      address:
+        jpn: 0x2170F58
+      description: |-
+        Returns the six ordered neighbors of one presentation-grid node. Qualified identity: overlay_d_00:02170f58.
+
+        Nodes are a 9x9 staggered/hex-style grid numbered row*9+column. Odd rows do not use column 8. Even and odd rows use
+        opposite diagonal offsets; invalid/out-of-bounds neighbors are 0xFF. The ordered neighbor list is consumed by the bounded
+        route search at overlay_d_00:02171498.
+    - name: FUN_overlay_d_00__02171498
+      address:
+        jpn: 0x2171498
+      description: |-
+        Finds a bounded route between presentation-grid nodes. Qualified identity: overlay_d_00:02171498.
+
+        r0: route-search work containing storage for 0x51 nodes and up to 12 blocked nodes.
+        r1: start node in 0..0x50.
+        r2: goal node in 0..0x50.
+        r3: output byte array.
+        stack +0x00: maximum output count; caller uses 0x10.
+        return: route byte count, zero when unreachable/invalid.
+
+        Uses the six neighbors from overlay_d_00:02170F58 and stores a shortest goal-to-start predecessor chain capped by the caller's
+        limit. `freecam_route.hpp` is the allocation-free C++ reproduction with fixed 81-entry arrays.
   data:
     - name: AT_LCG_Location
       address:
