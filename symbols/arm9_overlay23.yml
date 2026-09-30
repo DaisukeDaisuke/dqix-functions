@@ -2,10 +2,15 @@ main:
   versions:
     - jpn
   address:
-    jpn: 0x2200940
+    jpn: 0x21D9300
   length:
-    jpn: 0x4CC40
-  description: overlay31 memory
+    jpn: 0x25940
+  description: |-
+    DQ9 Japanese overlay 23 initialized memory.
+    Qualified Ghidra address space: overlay_d_23. Initialized range 0x021D9300..0x021FEC3F.
+    Separate BSS range: 0x021FEC40..0x021FF19F (0x560 bytes), excluded from length.
+    Layout verified against the supplied YDQJ revision-0 image; see docs/jpn-overlay-validation.md.
+    Existing function names and behavior were not revalidated by the layout check.
   functions:
     - name: lay_d_23_Handler
       address:
@@ -45,6 +50,7 @@ main:
         jpn: 0x21F5918
       description: unknown
   data:
+    # Existing main-RAM cross-reference, outside overlay 23; regional labels unchanged.
     - name: AT_LCG_Location
       address:
         jpn: 0x20EEE90
