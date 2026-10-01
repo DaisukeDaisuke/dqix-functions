@@ -11,6 +11,19 @@ main:
     GameMain fixes overlay ID 17 in overlay slot ID 2 at 0x0218C1C0 and normally does not unload it. This was also observed with script/dqix/overlay_jp.js after recent-State reload serial 3.
     Loaded-overlay table slot 2 is main 0x01FFD386 and contains 17. GameMain ACE may treat residency as invariant or use that byte as a defensive check; naked runtime addresses remain invalid outside the overlay's lifetime.
   functions:
+    - name: CopyExitTransitionRequest
+      address:
+        jpn: 0x0219D1E4
+      description: |-
+        Qualified identity: overlay_d_17:0219D1E4. JP source-derived descriptive name, not an original symbol.
+        Copies the reached exit record target map ID, destination coordinates and facing into the transition request. Other caller gates and overlay residency still apply; this routine alone does not establish that the transition will be performed.
+    - name: CheckHeroStaticMapExit
+      address:
+        jpn: 0x0219D57C
+      description: |-
+        Qualified identity: overlay_d_17:0219D57C. JP source-derived descriptive name, not an original symbol.
+        Scans static exit records in source order, subject to controller, world, hero and trigger-geometry gates, and prepares a request for a reached exit.
+        Two retained map-7402 exit-record values and a historical 7402-to-7401 transition provide limited corroboration of the data path. They are not a capture at this function trigger PC, nor proof of unconditional traversal or coverage of every map-transition path.
     - name: candidate_StartFieldEventById
       address:
         jpn: 0x21A0738

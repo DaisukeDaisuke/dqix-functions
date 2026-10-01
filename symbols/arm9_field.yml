@@ -20,6 +20,47 @@ main:
         Returns the current field id.
         
         return: field Id addr = DAT_020fb11c([DAT_02012db4] = DAT_020fb11c(CurrentField1_Id) = 0x4E21 = angel falls)
+    - name: DecodeExitTargetAndDestination
+      address:
+        jpn: 0x0201C8EC
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name.
+        Decodes common static-exit kind, typed destination, destination vectors/facing and raw metadata. String destinations are resolved by exact field code through 0x0209B6C0; failed resolution prevents the record from being appended.
+        This is exit-record decoding, not proof that an exit is currently reachable or that every transition uses this path.
+    - name: GetMapExitRecord
+      address:
+        jpn: 0x0201E2D4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name.
+        Returns an indexed runtime static-exit record from manager storage using a 0x70-byte record stride. The name does not imply general bounds safety or that all scripted transitions are represented in this table.
+    - name: HandleMinimapFixedDisplayGroup
+      address:
+        jpn: 0x0201F4B4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no new runtime witness.
+        BMMP opcode 0x6C handler. Builds a type-1 display group from two coordinate arguments and the following map IDs, then prepends it to the minimap group list.
+        Group fields include map-ID count at +0x2, u16 ID-array pointer at +0x4, fixed display X/Z at +0x8/+0xC, and next pointer at +0x10. These coordinates are display anchors, not measured actor positions.
+    - name: RequestFieldMinimapResource
+      address:
+        jpn: 0x020207B4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no new runtime witness.
+        Requests the minimap member using the format "%s.bmmp" and the resource name at map manager +0x26, previously selected by the map DAT handler at 0x0205F370.
+        The minimap resource name need not equal the current numeric map ID or field code. This annotation does not establish all generated or scripted-map loader paths.
+    - name: UpdatePartyMinimapMarkers
+      address:
+        jpn: 0x020230A4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no new runtime witness.
+        Produces party minimap marker data under additional party/mode/map gates. Actor +0x180 mask 0x10 selects stored minimap display X/Z through 0x020552D0; when clear, the source path uses physical actor coordinates.
+        A marker in fixed-display mode is not evidence of the actor's local world X/Z, facing, movement, or AT state.
+    - name: BindPartyMinimapDisplayGroups
+      address:
+        jpn: 0x02026540
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no new runtime witness.
+        Scans minimap coordinate groups against applicable party actors' map IDs obtained through 0x02037054. Type-0 groups set actor +0x180 mask 0x08 and clear mask 0x10; type-1 groups set mask 0x10 and pass their display coordinates to 0x020552C4.
+        Other actor and mode gates remain relevant. Shared outside minimap imagery does not by itself identify an interior actor's physical position.
     - name: getCurrentFieldStructure
       address:
         jpn: 0x202751C
@@ -38,6 +79,33 @@ main:
         r0: 0x020FDAAC
         r1: field id(angel falls = 0x4E21)
         return: address 0x020FDAAC + 0x314 * N(0-3 or 4)
+    - name: SetActorMinimapDisplayXZ
+      address:
+        jpn: 0x020552C4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name.
+        Stores minimap display X/Z in actor fields +0x19C and +0x1A0. These fields are separate from physical actor XYZ at +0x44/+0x48/+0x4C.
+        Used by the fixed-display group binding path; this setter alone does not move the actor.
+    - name: GetActorMinimapDisplayXZ
+      address:
+        jpn: 0x020552D0
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name.
+        Reads stored minimap display X/Z from actor fields +0x19C and +0x1A0 for the marker producer. The values may be fixed group anchors rather than physical actor X/Z.
+    - name: HandleMapMinimapResourceName
+      address:
+        jpn: 0x0205F370
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no new runtime witness.
+        Map AMBL DAT typed-call opcode 104 handler. Reads a non-null string argument and copies it to destination context +0x1A; in the inspected map-loader chain that context is map manager +0xC, so the selected name is at manager +0x26.
+        The selected name is later used by 0x020207B4 to request a BMMP minimap resource.
+    - name: SelectFieldEncounterTableByNodeAreaAndTime
+      address:
+        jpn: 0x02075050
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name.
+        Selects a natural encounter context using the candidate node area byte and field time. An area mask of zero is a wildcard; when no area row matches, selection falls back to the time-eligible rows.
+        With a nonempty eligible set, the table-selection path uses one AT integer-range draw even for a single table; an empty eligible set returns zero without that draw. Delay handling and weighted species selection are subsequent stages; this context selection alone does not certify a spawn or visible birth.
     - name: getSpawningMonsters
       address:
         jpn: 0x2075168
@@ -62,6 +130,9 @@ main:
         arguments are not yet understood
         r1: jpn(0x20FDB08?), eur(0x20FDDC4)
         return: monsterId,
+
+        JP source clarification (2026-10-01): rows are four bytes each. The first u16 supplies species = word & 0x0FFF and weight = (word & 0x7FFF) >> 12. The selector sums these weights, calls the AT integer-range wrapper, and returns the first species whose cumulative weight is strictly greater than the selected integer; no matching row returns 0xFFFFFFFF.
+        This clarifies the JP table selector only. It does not certify a visible birth, actor association, or current AT value; existing names and region addresses are retained.
     - name: GenerateCompanionByBT
       address:
         jpn: 0x209CD4C
@@ -102,6 +173,31 @@ main:
         r0: table base addr
         r1: table id
         return: table start addr
+    - name: HandleFieldEncounterRow
+      address:
+        jpn: 0x0209D7E8
+      length:
+        jpn: 0xA4
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; this callback was not freshly invoked in a runtime capture.
+        Handles an encfld row while the parser manager is enabled. Decodes the packed row halfword and its integer or float scale argument, converts the scale, defaults a zero converted scale halfword to 0x1000, and passes the pair to 0x0209DBBC for the selected table.
+        This is table construction, not a visible-spawn or birth observation.
+    - name: HandleFieldEncounterTableDefinition
+      address:
+        jpn: 0x0209D894
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no fresh runtime invocation witness.
+        When parser manager +0x14 is nonzero, decodes the table ID, calls the table lookup/ensure routine at 0x0209DAB8, and stores that ID at manager +0x18 for subsequent rows.
+        The entry was checked with a transient read-only function definition. Its full persisted function size is not established here.
+    - name: AppendFieldEncounterRow
+      address:
+        jpn: 0x0209DBBC
+      length:
+        jpn: 0x40
+      description: |-
+        JP source-derived annotation (2026-10-01), not an original symbol name; no fresh runtime invocation witness.
+        Looks up the requested encounter table through 0x0209DB0C and returns without appending if it is absent. Otherwise increments the u16 row count at table +0x2 and appends the two supplied halfwords at table +0x8 plus four times the previous row count.
+        The inspected row callback supplies the packed species/weight halfword followed by the converted scale halfword.
     - name: DAT_022A7100
       address:
         jpn: 0x218C1D0
