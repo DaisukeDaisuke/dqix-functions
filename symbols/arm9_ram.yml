@@ -16,6 +16,42 @@ main:
     
     It lists functions that perform basic processing found in many functions and functions related to random numbers.
   functions:
+    - name: UpdateFrameClockFromElapsedUnits
+      address:
+        jpn: 0x200FFAC
+      description: |-
+        Updates registry clock fields from an upstream 64-bit elapsed argument.
+        Clamps elapsed units to 50000, integer-divides by 1000 into +0x3B8,
+        applies signed16 Q12 scale (+0x3BC) with float32 arithmetic into +0x3B4.
+        Copies pending count +0x3C8 to +0x3C4, clears pending, caps phase to 3.
+        +0x3C0 is the truncated Q12 ratio using ROM float divisor 17.0.
+        r0: registry; r1/r2: elapsed low/high words.
+        Source/native check: 67 producer calls and 372 forwarded NPC pairs matched
+        on one JP map-entry prefix (2026-10-02). Upstream timing is not predicted.
+        See docs/jpn-npc-clock-producer.md for evidence and boundaries.
+    - name: GetFrameClockScaledDelta
+      address:
+        jpn: 0x2010064
+      description: |-
+        r0: registry. Returns word at registry+0x3B4.
+        The NPC slot dispatcher forwards it as r2 to 0x02041128.
+        It is not a universal 33-per-update constant.
+    - name: GetFrameClockPhase
+      address:
+        jpn: 0x201007C
+      description: |-
+        r0: registry. Returns word at registry+0x3C4.
+        The NPC slot dispatcher forwards it as r3 to 0x02041128.
+        Producer 0x0200FFAC caps its pending-counter-derived value to 3.
+    - name: UpdateNpcControllerSlots
+      address:
+        jpn: 0x203E21C
+      description: |-
+        Traverses 32 controller-pointer slots from argument+0x0C in slot order.
+        For nonnull controllers without flag 0x8000, calls 0x02041128.
+        r1 is registry+0x3B0's input-vector pointer, not a raw delta.
+        r2/r3 are scaled delta/phase from 0x02010064 and 0x0201007C.
+        This identifies dispatch and argument flow, not a whole-world AT proof.
     - name: abs
       address:
         jpn: 0x20016C0
