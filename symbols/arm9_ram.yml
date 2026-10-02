@@ -805,6 +805,47 @@ main:
         
         no argument
         return: 0x02108788
+
+        JP source verification (2026-10-02): loads the literal value at main:0205FF28 directly.
+        0x02108788 is the story/chain owner address, not a pointer slot or the first story-bit byte.
+        The generic story-bit array used by placement and event conditions begins at owner +0x8C (0x02108814).
+        Packed quest records begin at owner +0x2CC (0x02108A54); these are separate from the bit array.
+        These are runtime RAM addresses, not offsets in a .sav file. See docs/jpn-story-quest-flag-layout.md.
+    - name: TestStoryOwnerBit
+      address:
+        jpn: 0x206F104
+      description: |-
+        JP source-derived descriptive name (2026-10-02), not an original symbol.
+        r0: unused owner argument in this implementation
+        r1: explicit byte-array base; story callers commonly supply getStoryFlagStartAddr() +0x8C
+        r2: signed bit index; a negative index returns 0
+        For nonnegative indexes returns byte[r2 >> 3] & (1 << (r2 & 7)), with bit 0 the byte's least-significant bit.
+        The return value is the masked bit, not a normalized 0/1. No upper-bound check is performed here.
+    - name: GetPackedQuestState
+      address:
+        jpn: 0x206F274
+      description: |-
+        JP source-derived descriptive name (2026-10-02), not an original symbol.
+        r0: story/chain owner; r1: signed quest record index
+        For 0 <= r1 < 204, returns (byte[owner +0x2CC + (r1 >> 1)] >> (4 * (r1 & 1))) & 3.
+        Even indexes occupy the low nibble and odd indexes the high nibble. Invalid indexes return 0.
+        This verifies numeric states 0..3 only; semantic state names are not established here.
+    - name: TestPackedQuestBit2
+      address:
+        jpn: 0x206F3B4
+      description: |-
+        JP source-derived descriptive name (2026-10-02), not an original symbol.
+        r0: story/chain owner; r1: signed quest record index, valid range 0..203
+        Returns byte[owner +0x2CC + (r1 >> 1)] & (4 << (4 * (r1 & 1))). Invalid indexes return 0.
+        Tests bit 2 of the selected quest nibble; result is a mask, not normalized bool.
+    - name: TestPackedQuestBit3
+      address:
+        jpn: 0x206F430
+      description: |-
+        JP source-derived descriptive name (2026-10-02), not an original symbol.
+        r0: story/chain owner; r1: signed quest record index, valid range 0..203
+        Returns byte[owner +0x2CC + (r1 >> 1)] & (8 << (4 * (r1 & 1))). Invalid indexes return 0.
+        Tests bit 3 of the selected quest nibble; result is a mask, not normalized bool.
     - name: CheckStoryFlags
       address:
         jpn: 0x206577C
