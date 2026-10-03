@@ -414,6 +414,55 @@ main:
         JP descriptive annotation, not an original symbol name.
         Native callback veneer passes mode0, render context, and map-specific packet template to 020E48F4. Observed at map7400 after original-State natural-input route; not an original symbol name.
         Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: LoadStaticFieldModelWithEnvironment
+      address:
+        jpn: 0x02014B4C
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Source loader used by the ordinary static-model branch. Loads/initializes the render object, registers callback literal020E4B60 via020B48F4 with arguments0,8,1, and conditionally calls02052B60. Source conditions, variant selection, animation and current environment remain relevant; not an all-map render guarantee.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: CopyMapObjectRotationAndInvalidateCache
+      address:
+        jpn: 0x02016B2C
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Source call copies a map object rotation matrix into the SDK global destination and clears cache bits with maskFFFFFF5B. Native default source transforms were compared for three D04 billboard nodes; arbitrary placement/animation is not thereby accepted.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: DrawEnabledFieldRenderObject
+      address:
+        jpn: 0x0207F5FC
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Source guard checks object+A8 bit0, optionally invokes0207F6FC, adjusts render flags for further+A8 bits, then calls020B5D38. This annotation does not establish visibility/culling for every source model.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: ApplyFieldEnvironmentModelColors
+      address:
+        jpn: 0x02052B60
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Source environment path selects time/event parameters, invokes overlay helpers, and traverses shape display-list command parameters with02051E10/02051E40 to modify color-bearing values. A separate F06 runtime material ambient-word difference is observed, but its writer has not yet been proven to be this function; do not conflate these facts.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: RegisterSbcRenderCallback
+      address:
+        jpn: 0x020B48F4
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Observed caller02014B4C passes the map Y-billboard callback020E4B60 with selector8 and timing argument1. D04 runtime context actually invokes that callback. General registration/cache semantics remain source-audit work.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: BuildDefaultSbcMaterialResult
+      address:
+        jpn: 0x020B60AC
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Type0 SDK material handler. Native F06M0400 material1 entry was identified by an exact256-byte model-header match. ROM diffuse/ambient2529FFFF differs from loaded RAM41E5FFFF; the sender uses the RAM word. Material animation/cache/environment and prior mutation must not be replaced with ROM defaults.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: SendPackedGeometryCommandWords
+      address:
+        jpn: 0x020B8598
+      description: |-
+        Descriptive JP annotation, not an original symbol name.
+        Native material observation reaches this sender with r0=00293130, r1 pointing to six parameter words and r2=6. Captured F06 parameters preserve the runtime diffuse/ambient word41E5FFFF. Generic packet lengths and other opcode sequences need caller-specific validation.
+        See docs/jpn-field-lighting-first-difference-20261004.md.
   data:
     - name: CurrentField1_Id
       address:
