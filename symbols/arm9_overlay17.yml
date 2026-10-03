@@ -71,4 +71,16 @@ main:
 
         main 0x0200FB68(dynamicBase) returns dynamicBase +0x3F8. At overlay_d_17:0219FCF8-0219FD00 this function loads r1 from that record +0x20 (dynamicBase +0x418), restores r0 from r9, and calls overlay_d_17:021A0738. At overlay_d_17:0219FDE4-0219FDF4 it loads r1 from record +0x24 (dynamicBase +0x41C), requires the signed value to be nonnegative, restores r0 from r9, and makes the same call.
         The loaded values are global event IDs consumed as u16 by the callee. They are distinct from current map ID values such as 0x1133/0x1193 stored at main 0x020FB11C.
+    - name: ResolveFieldFloorCandidateWithTolerance
+      address:
+        jpn: 0x02193710
+      description: |-
+        Qualified identity: overlay_d_17:02193710. Descriptive JP annotation.
+        Naturally reached caller of main 02030DF4 in the original-State floor case.
+        Plane Y653 plus0x199 gives1062, but CMP at02193A20 observes delta2 and
+        BLE at02193A24 takes02193A3C for the <=40 tolerance branch, retaining actorY1064.
+        Native caller code1836bytes matches the imported overlay. This is one branch,
+        not general floor settling, all maps, or permission to snap actor Y.
+        See docs/jpn-map-render-committee-20261003.md.
   data: []
+

@@ -267,6 +267,153 @@ main:
         r0: maybe the starting address of the monster 0x22A7100(check if it's 0)
         r1: Monster encountered 0-2f?
         return: 0x022A7100
+    - name: RequestFieldTextureArchive
+      address:
+        jpn: 0x02013E08
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived from original JP ROM. Selects AMBL request path using native six-byte field code or generated-map variant. Does not prove current loader completion.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: PollAndLoadFieldTextureArchive
+      address:
+        jpn: 0x02013ED4
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee A source-derived loader. Iterates AMBL members and dispatches texture, BMBL and associated resource records. Active resource lifetime remains caller-dependent.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: RequestFieldGeometryArchive
+      address:
+        jpn: 0x02014374
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived AMDJ request. Ordinary maps use native field code; map IDs 10000/10100 use b then a phases. Generated maps require current variant. Original-State request-code 340 bytes match ROM; computed path D04M02.amdj is not a captured map-entry invocation.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: PollAndLoadFieldPlacementStreams
+      address:
+        jpn: 0x020144C8
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee A source-derived AMDJ loader. Matches BMDJ members against registered BMBL chunk names using case-sensitive substring helper 02004158. Do not infer BMDJ name from maplist modelResource.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: HandleBmblChunkDefinition
+      address:
+        jpn: 0x0201C550
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        BMBL opcode 0x65: reads ID, XYZ and up to three names, then appends an 0x58-byte chunk record. Defined fields match one original-State record. Uninitialized string padding and runtime tail are not inferred.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: GetBmblChunkRecord
+      address:
+        jpn: 0x0201E064
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived indexed record lookup; stride 0x58, index must be nonnegative and below count. Not a map-ID lookup.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: AppendBmblChunkRecord
+      address:
+        jpn: 0x0201E090
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived append subject to count/capacity. Copies ID/XYZ and three 16-byte name fields plus remaining tail. Some caller stack bytes are uninitialized; do not model them as zero.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: ApplyFieldCameraProjectionAndView
+      address:
+        jpn: 0x0202DC14
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee C r6 identifies native camera projection/view submission. Bounded ordinary-state perspective packet replay matched; scripts, interpolation, shake and mode overrides remain separate.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: BuildOrdinaryFieldCameraEye
+      address:
+        jpn: 0x0202E148
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee C native/source evidence: target plus Y-rotated [0,height,sqrt(radius^2-height^2)] using SDK fixed-point arithmetic. Nonzero yaw R/L cases were separately reported. Not arbitrary camera-mode acceptance.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: ForwardFieldOrbitToEyeBuilder
+      address:
+        jpn: 0x0202E7CC
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Reads camera orbit height/radius at +0x74/+0x78 and forwards current yaw/target to 0202E148. Initial map preset is not necessarily the current applied camera.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: OverlapCol2CandidateAabb
+      address:
+        jpn: 0x02030BD4
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived inclusive XYZ interval overlap predicate used by COL2 candidate collector. Does not identify walkable ground by itself.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: SelectNativeFloorCandidate
+      address:
+        jpn: 0x02030DF4
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        One original-State ordered-candidate selector replay matched selected index 0 and point [0,653,65536]. Barycentric ranking Y=656 differs from final fixed-point plane-intersection Y=653. No general stacked-floor acceptance.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: IntersectNativeSegmentTriangle
+      address:
+        jpn: 0x020316BC
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        One naturally reached original-State segment-triangle call and outputs matched an integer replay. Input bounds and unsupported geometric branches remain explicit.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: IntersectNativePlaneSegment
+      address:
+        jpn: 0x02031BC8
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        One naturally reached original-State plane-segment call matched fixed-point fraction and point [0,653,65536]. Do not substitute floating or barycentric ranking height.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: InitializeCol2ResourceHeader
+      address:
+        jpn: 0x0204CD64
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Source-derived version-3 COL2 resource header setup. Structural corpus decoding is not collision or rendering coverage.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: CollectCol2CandidateTriangles
+      address:
+        jpn: 0x0204CE50
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Native-context collector replay matched one original-State candidate: record485, attributes and order. 192-visited continuation, other instances/transforms and general-map ground remain unresolved.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: ApplyInitialFieldCameraPreset
+      address:
+        jpn: 0x020A4490
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee C source-derived default camera apply: controller+0x246 yaw to +0x220, height/radius to +0x224/+0x228, then native camera setter path. Initialization arrival was not dynamically witnessed in that audit.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: HandleSdkFullBillboard
+      address:
+        jpn: 0x020B6BB8
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Committee A/default SDK source path. Requires actual model-view, flags and callbacks. Original shrine two-frame probes did not reach it; no blanket native acceptance.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: HandleSdkYBillboard
+      address:
+        jpn: 0x020B6EC0
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Native outdoor entry was reached after natural movement to map7400. The observed map-specific callback sets skip bit0x40, suppressing this handler default body. Default-body packet reproduction must not substitute for that callback.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: ApplyMapBillboardCallback
+      address:
+        jpn: 0x020E48F4
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Native outdoor mode0 callback: projection-identity model-view readback, preserved 72-byte GX template, translation update, conditional cached Y-column normalization, context skip bit0x40. Initial dirty1 and following two dirty0 packets match replay. Code640 bytes match ROM. Mode1/resource correction and full-scene integration remain unresolved.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
+    - name: MapYBillboardCallbackVeneer
+      address:
+        jpn: 0x020E4B60
+      description: |-
+        JP descriptive annotation, not an original symbol name.
+        Native callback veneer passes mode0, render context, and map-specific packet template to 020E48F4. Observed at map7400 after original-State natural-input route; not an original symbol name.
+        Evidence and limits: docs/jpn-map-render-committee-20261003.md.
   data:
     - name: CurrentField1_Id
       address:
@@ -283,3 +430,4 @@ main:
         jpn: 0x22A4B08
       length:
         jpn: 0x4
+
