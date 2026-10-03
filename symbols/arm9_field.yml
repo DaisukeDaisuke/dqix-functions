@@ -127,12 +127,13 @@ main:
         This function only chooses the type of spawning monsters. the conditions under which the monsters are generated are selected by an unknown function.
         If an ID that cannot be spawned is returned (id not on the table, trap monster, etc.), the spawn will not be performed.
         
-        arguments are not yet understood
-        r1: jpn(0x20FDB08?), eur(0x20FDDC4)
-        return: monsterId,
+        JP argument r0: encounter table base pointer; source and bounded native entry confirm this (2026-10-04).
+        Historical EUR pointer note 0x20FDDC4 remains unverified here; no EUR argument claim is made.
+        return r0: monsterId,
 
         JP source clarification (2026-10-01): rows are four bytes each. The first u16 supplies species = word & 0x0FFF and weight = (word & 0x7FFF) >> 12. The selector sums these weights, calls the AT integer-range wrapper, and returns the first species whose cumulative weight is strictly greater than the selected integer; no matching row returns 0xFFFFFFFF.
         This clarifies the JP table selector only. It does not certify a visible birth, actor association, or current AT value; existing names and region addresses are retained.
+        Bounded native witness (2026-10-04): generated F06 local State plus Down180, table pointer r0=0x020FDB08, event-time header table20/count4, max17, AT output8413 -> integer4 -> species88 at caller return0x02074E20. Creator return0x02074EBC returns slot115 without another observed AT call. This is one measured local trajectory, not a general spawn guarantee; see docs/jpn-at-search-native-bridge-20261004.md.
     - name: GenerateCompanionByBT
       address:
         jpn: 0x209CD4C
