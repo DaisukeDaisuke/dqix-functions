@@ -463,6 +463,24 @@ main:
         Descriptive JP annotation, not an original symbol name.
         Native material observation reaches this sender with r0=00293130, r1 pointing to six parameter words and r2=6. Captured F06 parameters preserve the runtime diffuse/ambient word41E5FFFF. Generic packet lengths and other opcode sequences need caller-specific validation.
         See docs/jpn-field-lighting-first-difference-20261004.md.
+    - name: SetModelMaterialAmbientColor
+      address:
+        jpn: 0x020B8B58
+      description: |-
+        Native JP F06M0400 material1 entry captured with model0231514C, index1 and ambient41E5. Store020B8BCC changes2529FFFF to41E5FFFF using mask8000FFFF. Exact96 executable bytes match original SDK; isolated writer replay matches. This proves the observed writer, not upstream environment selection.
+        See docs/jpn-field-ambient-writer-20261004.md.
+    - name: SetAllModelMaterialAmbientColors
+      address:
+        jpn: 0x020B8D78
+      description: |-
+        Loops model material count at model+18 and calls020B8B58 for each index. Native material1 setter LR020B8DA4 confirms this caller in F06. Descriptive name, not original SDK symbol.
+        See docs/jpn-field-ambient-writer-20261004.md.
+    - name: ApplyEnvironmentAmbientToModel
+      address:
+        jpn: 0x02053808
+      description: |-
+        Loads environment+40 as u16, rearranges arguments, and tail-jumps through0205381C to020B8D78. Captured environment02107874+40 equals41E5 and setter input41E5. Scene caller02016BB4 invokes this before model drawing. Upstream time/event computation remains unverified.
+        See docs/jpn-field-ambient-writer-20261004.md.
   data:
     - name: CurrentField1_Id
       address:
