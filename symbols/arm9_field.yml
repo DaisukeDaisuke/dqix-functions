@@ -13,6 +13,76 @@ main:
     usa: 0xF08000
   description: in field memory
   functions:
+    - name: LoadTouchArrowSprites
+      address:
+        jpn: 0x02098254
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Loads four arrow%d.spr resources through the SPR path formatter at 0x02048898. The recovered source path resolves /data/ani/%s. This establishes source resource identity, not whether the overlay is currently visible.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: UpdateTouchOriginAndCurrentCoordinates
+      address:
+        jpn: 0x02098330
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Updates touch-origin/current screen-coordinate bytes used by the conditional overlay path. The origin is touch-start screen space, not an actor/world position or player-center prior.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawTouchOverlayConditionally
+      address:
+        jpn: 0x02098474
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Passes stored touch-origin/current coordinate bytes into the conditional overlay drawing path. The recovered record does not establish the current visibility guards from a video frame.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: TouchControlDistanceBranch
+      address:
+        jpn: 0x02098520
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Inspected touch-control direction path branches at a source-derived distance of 8 pixels. The shorter-distance fallback can consult actor heading; the isolated reconstruction reports that case as unknown rather than supplying a heading from memory or a default. This name describes the inspected path, not a complete recovered prototype.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawTouchRingShaftHeadDot
+      address:
+        jpn: 0x02098888
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Emits the ordinary four-sprite sequence ring, shaft, head, dot. Ring uses touch origin minus (8,8); dot is later drawn at origin minus (4,4). Shaft/head use source fixed-point distance, normalization, angle and rotation/scale paths. Reconstructed geometry matched 1960 synthetic ROM executions; current visibility, nondefault sprite state and captured pixel ownership remain unresolved.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawSpriteCenteredWrapper
+      address:
+        jpn: 0x02048104
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Centered sprite draw wrapper reached by the ordinary touch shaft/head path. This annotation identifies the inspected source branch; arbitrary sprite modes and a full public calling convention are not established.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawSpriteUncenteredWrapper
+      address:
+        jpn: 0x020481E8
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Uncentered sprite draw wrapper reached by the ordinary touch ring/dot path, forwarding to the source top-left image transform. Source defaults and sprite state still determine the emitted material.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawSpriteCenteredImage
+      address:
+        jpn: 0x02048268
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Source centered-image transform reached by the ordinary touch shaft/head path. Width-centering and sprite dimensions participate in the matrix chain; this does not identify a player position or a current video vector.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: DrawSpriteTopLeftImage
+      address:
+        jpn: 0x02048374
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Source top-left sprite transform used by the ordinary touch ring/dot path. The recovered reconstruction retains the source vertical transform and image dimensions before quad emission.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
+    - name: EmitSpriteGXQuad
+      address:
+        jpn: 0x02048538
+      description: |-
+        JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Emits source sprite quad geometry, UVs and texture/material state in the inspected ordinary sprite path. The touch reconstruction keeps the original four polygons and draw order. Its shared-raster comparison does not establish complete native framebuffer equality.
+        See docs/jpn-touch-overlay-source-20261006.md for guarded source identities, measured coverage and limitations.
     - name: getAddrCurrentFieldId
       address:
         jpn: 0x2012DAC

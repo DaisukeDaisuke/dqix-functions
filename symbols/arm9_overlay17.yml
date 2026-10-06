@@ -11,6 +11,13 @@ main:
     GameMain fixes overlay ID 17 in overlay slot ID 2 at 0x0218C1C0 and normally does not unload it. This was also observed with script/dqix/overlay_jp.js after recent-State reload serial 3.
     Loaded-overlay table slot 2 is main 0x01FFD386 and contains 17. GameMain ACE may treat residency as invariant or use that byte as a defensive check; naked runtime addresses remain invalid outside the overlay's lifetime.
   functions:
+    - name: DrawFieldOrthographicUISubpass
+      address:
+        jpn: 0x02196CB0
+      description: |-
+        Qualified identity: overlay_d_17:02196CB0. JP source-derived descriptive annotation recovered 2026-10-06, not an original symbol name.
+        Establishes the ordinary 256x192 orthographic field UI subpass and calls the touch-overlay path. Dimensions and projection operands are read from guarded source instructions rather than fitted video boxes.
+        The isolated projection/view reconstruction matched ROM instruction execution; current visibility, destination depth, fog and capture transform are not established by this source annotation. See docs/jpn-touch-overlay-source-20261006.md.
     - name: CopyExitTransitionRequest
       address:
         jpn: 0x0219D1E4

@@ -1,0 +1,285 @@
+{
+  "schema": "dq9-touch-source-annotation-evidence-v1",
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "scope": "Source span identities and bounded synthetic evidence only. No ROM bytes, sprite payloads, pixels, GX command arrays, live memory or decompiled functions.",
+  "sourceGuards": [
+    {
+      "image": "sdk",
+      "address": "0x02098254",
+      "length": 156,
+      "sha256": "f6909fb246d42e7c2158f1ed16be28ea13bdb15cc6f7bad7d2ab75861f0d175e",
+      "purpose": "Four arrow SPR loader"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048898",
+      "length": 184,
+      "sha256": "d896377049dd678789320e8102eb7a58c28cdc8f5d162e0facb27b34e5a49013",
+      "purpose": "SPR path formatter"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048960",
+      "length": 916,
+      "sha256": "461049c5382d56535ef6ed41e38b82d821bd17a2a0e21e0c9a08b1e9aa605d27",
+      "purpose": "SPR payload loader"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02047FBC",
+      "length": 148,
+      "sha256": "c75b636c831017ac27f197be7b08a60917d13a385a62e88323b16ce871a562a3",
+      "purpose": "Sprite unit scale/RGB/alpha defaults"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02098330",
+      "length": 320,
+      "sha256": "3f4af147e8c5f1464b4bdd13597a42d8536ee07d2f83406c5c1179ce21685503",
+      "purpose": "Touch-origin/current coordinate update"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02098474",
+      "length": 128,
+      "sha256": "54ecbf52455148742d0f8d86762eb9c7cc8a26f95b2ec677778b9d1e913c61b0",
+      "purpose": "Conditional overlay call"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02098888",
+      "length": 832,
+      "sha256": "ccb9cc275a164e3e8261749b3e73873e908001ccc101e8ca492f92a1a5ed4e1b",
+      "purpose": "Ring/shaft/head/dot source transform"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020481E8",
+      "length": 128,
+      "sha256": "ba5d7ee6dc6f25803a03d35026d48a42f9594fb02f14a4fa5aa6421f29673678",
+      "purpose": "Uncentered sprite draw wrapper"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048374",
+      "length": 244,
+      "sha256": "2426ee6549c301f09942cc009c86c00635b0812c8b8ba0017d0107ccb5677f54",
+      "purpose": "SPR top-left draw transform"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048538",
+      "length": 420,
+      "sha256": "c1207025b1c35055777b2a43926a7a56b0a2c91380bd603ebc1efbc076d3531a",
+      "purpose": "GX sprite quad/texture/alpha"
+    },
+    {
+      "image": "field",
+      "address": "0x02196CB0",
+      "length": 692,
+      "sha256": "22554cc866c3a6d258fe5b7fe7638df5c5d5ea1cbfd593c5393d2c5539b750fa",
+      "purpose": "Orthographic field UI subpass and touch draw"
+    },
+    {
+      "image": "field",
+      "address": "0x0219C39C",
+      "length": 16,
+      "sha256": "8b3ba88147594388732b28b449f0d28685fc30b989686304bd00954e933a1b12",
+      "purpose": "Field source constructor call"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02098520",
+      "length": 336,
+      "purpose": "Touch distance branch",
+      "sha256": "8fe2eae4b1cf83b76ccc211fd005ec0b327b77855359e136152335c70d28078c"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02098888",
+      "length": 832,
+      "purpose": "Four sprite draw",
+      "sha256": "ccb9cc275a164e3e8261749b3e73873e908001ccc101e8ca492f92a1a5ed4e1b"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048104",
+      "length": 216,
+      "purpose": "Centered sprite wrapper",
+      "sha256": "5022d7d54e4bef97ef1651f7eddea763fa63a1c55d1f57e7975e510bba080c9a"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02048268",
+      "length": 268,
+      "purpose": "Centered sprite image",
+      "sha256": "95285b3ff1302df508b898a3b53735db37608027f876aea052c42b0cd84fd74d"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020486A8",
+      "length": 52,
+      "purpose": "Source UV conversion",
+      "sha256": "98550372965107aecc160797dcff6796b8c1e9cd5f8c96b3b1a832e465c24bcc"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020486DC",
+      "length": 112,
+      "purpose": "Initial animation selector",
+      "sha256": "7a3d3ace4659b78cbbec42ec332cfefd4806e7e60c79a715c7f1a2a71b181b36"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C4890",
+      "length": 40,
+      "purpose": "Vector subtraction",
+      "sha256": "46de2befc83ff02167691e16b0a7cb35127c4e723d581149629a448e94a4c0e3"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C49E4",
+      "length": 280,
+      "purpose": "Integer vector normalization",
+      "sha256": "375c439d5ff6ac1e58c7172387dcaf618f72d6511ea41488878daafbff7d1bd3"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C4AFC",
+      "length": 124,
+      "purpose": "Integer vector distance",
+      "sha256": "cae5540a5a2c4b7eefeeeb44787e2614f811c2db24ada5b22d7d500f2326ef33"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C4E58",
+      "length": 440,
+      "purpose": "Fixed atan2 table branch",
+      "sha256": "b908be6375b0d76d9ee3e090835b801b3524446a9a93c89d41345a99ca91c657"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02030A68",
+      "length": 156,
+      "purpose": "Angle wrapping",
+      "sha256": "4c16f6b518b6faa058380bf08109435109e0a58130a9129b438bceb71f3ed6df"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020307A0",
+      "length": 112,
+      "purpose": "Source trigonometry",
+      "sha256": "5ea212257efac5fa16af394b82d2927bbde331b55961701c854b42d658aa5e2e"
+    },
+    {
+      "image": "sdk",
+      "address": "0x02030910",
+      "length": 84,
+      "purpose": "Source Z matrix",
+      "sha256": "8bd99d5fd322cee62082792b54c6919e8933a9a73af3ece41e5801efd94ed28f"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C3484",
+      "length": 28,
+      "purpose": "Thumb Z matrix writer",
+      "sha256": "24df3d755bc902bd12ee6f8899c168e500b3741cf63d582f74d72226f275ff5f"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C46C0",
+      "length": 296,
+      "purpose": "Hardware fixed division",
+      "sha256": "df76d4daeb25e049e33420222ca80086e531018593973d0ed55e0c376d527f22"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020E955C",
+      "length": 16384,
+      "purpose": "Sin/cos source table",
+      "sha256": "b40c47b014ca8650c539760fd4c519cabce6f091628566ca0dd22318bb2c5b7a"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020ED55C",
+      "length": 258,
+      "purpose": "Atan source table",
+      "sha256": "0d8565b7365bca8e390fb05eba5f978c27f87ad83f64812b1eb455d8a86ee7dc"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C44B8",
+      "length": 516,
+      "purpose": "Orthographic source matrix",
+      "sha256": "aa9f85d2781d9e4baed0983dd5def4d42ff32c8b757310a4a63d104995c06eeb"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C3BA0",
+      "length": 264,
+      "purpose": "Source UI look-at",
+      "sha256": "9cfd673eefb605a860c67350d2397f854e054ed78ce4ebd4586c9fb540a52bbc"
+    },
+    {
+      "image": "sdk",
+      "address": "0x020C723C",
+      "length": 176,
+      "purpose": "Projection/view GX wrappers",
+      "sha256": "8631552fd8256e8c32fd245f6f163f94ecba038d52988db08e52407f64ea8b5c"
+    },
+    {
+      "image": "field",
+      "address": "0x021D6858",
+      "length": 24,
+      "purpose": "UI view direction/up constants",
+      "sha256": "06f4d02b7b41bdcdfe3097c2af197eda9710a59b2a05fde8f022f54caf1d0934"
+    }
+  ],
+  "sourceGuardNote": "33 checks include the same four-sprite draw span in both readers; source spans and instruction sites are not all standalone function boundaries.",
+  "recoveredReaderSHA256": "56070250705e0445c7b83e39881a9c40b8a81f4f50bf8323545f64045e79e6fb",
+  "reconstructedCompositionSHA256": "8da345803b2984a29cb4a6bfd8d9967a29e839d3a66031b608577960ce61bb62",
+  "reconstructedRasterSHA256": "5eae68d2c9a116486e264449f3258acf94f32c0516ad22042453637cd05913a9",
+  "geometry": {
+    "status": "reconstructed-and-newly-rerun",
+    "assertions": 45080,
+    "cases": 1960,
+    "polygons": 7840,
+    "exactMath": true,
+    "exactMatrices": true,
+    "exactGXVerticesUVColor": true,
+    "exactMaterial": true,
+    "textureAddressCanonicalization": "VRAM lower16 omitted; source resource hash retained",
+    "originalZIPRecovered": false,
+    "scope": "Fresh ROM instruction executions with synthetic sprite objects. Not current native state or pixel parity."
+  },
+  "raster": {
+    "status": "newly-rerun-after-reconstruction",
+    "cases": 256,
+    "exact": 256,
+    "unsupported": 0,
+    "assertions": 1539,
+    "selection": "Indices floor(i*1960/256),i0..255",
+    "projectionMatchesROM": true,
+    "viewMatchesROM": true,
+    "planes": [
+      "rgba",
+      "rgba6665",
+      "coverage",
+      "depth24",
+      "owner"
+    ],
+    "scope": "Fresh identical shared integer-raster outputs: independent ROM-emitted polygons versus reconstructed generated polygons. No native framebuffer/capture parity."
+  },
+  "unit": {
+    "status": "newly-rerun-after-reconstruction",
+    "assertions": 74,
+    "sourceBindingsRejected": true,
+    "sourceMutationRejected": true,
+    "shortDistanceUnknown": true,
+    "unboundOrMutatedPolygonsRejected": true,
+    "isolatedPixelRepeatIdentical": true,
+    "negativeZIPUnchanged": true,
+    "readerCopyExactRecovered": true,
+    "productionFilesTouched": false
+  }
+}
