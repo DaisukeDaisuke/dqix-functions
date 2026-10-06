@@ -1,0 +1,27 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "ranges": [
+    {
+      "start": "020ba3e8",
+      "endExclusive": "020ba478",
+      "bytes": 144,
+      "sha256": "80e88bed0fed9ffb6da72dae2bbe0dac199d557577302ef4ebe12960eacd2f3b",
+      "meaning": "sampled-reference dispatch and cross/normalize branches"
+    },
+    {
+      "start": "020ba7c0",
+      "endExclusive": "020ba92c",
+      "bytes": 364,
+      "sha256": "a2c078a9bf0f367930f8a733b99db1794f32ea0dcf997d59bf1ee8e4a81512eb",
+      "meaning": "pivot/basis helper and literal pool"
+    },
+    {
+      "start": "020e9390",
+      "endExclusive": "020e93b4",
+      "bytes": 36,
+      "sha256": "b104739dd0b50984bf3cc5444e4c866fb24ad6efb2ea921fb6baa53dcb073fa0",
+      "meaning": "animation pivot table"
+    }
+  ],
+  "evidence": "Static ROM plus semantic replay; no original-instruction execution"
+}

@@ -1,0 +1,161 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "ranges": [
+    {
+      "space": "arm9",
+      "start": 34044680,
+      "end": 34044884,
+      "bytes": 204,
+      "sha256": "82180e17cf6a562c0f4138ab55064a6a4d300306ce5130b4702c34c27cebf4a2",
+      "reason": "source-guarded natural actor draw wrapper"
+    },
+    {
+      "space": "arm9",
+      "start": 33762068,
+      "end": 33762352,
+      "bytes": 284,
+      "sha256": "f9f293a5b579196dae343b8e5c80cefceb0f8fcb8f816d1b21572a9db369fb44",
+      "reason": "ordinary actor draw entry/directmaterial calls"
+    },
+    {
+      "space": "arm9",
+      "start": 34296204,
+      "end": 34296532,
+      "bytes": 328,
+      "sha256": "a30fbaadf1924013630fca184bc41a351091089a3f0295e8620700d00361903e",
+      "reason": "exact SDK material initialization consumed bysavedprogram"
+    },
+    {
+      "space": "arm9",
+      "start": 33762348,
+      "end": 33762848,
+      "bytes": 500,
+      "sha256": "b7da64a8bdc58b6119d1ae851f7cc4dc8e98989de1b062b0efd7a116f4e64ce8",
+      "reason": "remainingordinary actor draw material state and directcalls"
+    },
+    {
+      "space": "arm9",
+      "start": 33772680,
+      "end": 33773360,
+      "bytes": 680,
+      "sha256": "1a1b80191e0f1be6f1b1634144087c0cda50ff62a1316e7b6540e55d633fe93f",
+      "reason": "ordinary actor renderer pre-material/global writers"
+    },
+    {
+      "space": "arm9",
+      "start": 33771852,
+      "end": 33771944,
+      "bytes": 92,
+      "sha256": "35e17b0099218a8971fc674eb627f231bdac68622aa4346313f62a76b03b9c9f",
+      "reason": "ordinary actor pre-draw material/global operation"
+    },
+    {
+      "space": "arm9",
+      "start": 33779424,
+      "end": 33779488,
+      "bytes": 64,
+      "sha256": "5861e4a4d73d512c2b576fb6a59396748c08ff0c955fe35679114d244bb3c830",
+      "reason": "peractor value consumed beforemodel setter"
+    },
+    {
+      "space": "arm9",
+      "start": 34076996,
+      "end": 34077128,
+      "bytes": 132,
+      "sha256": "f98a9fb815d5ff8123d889f96eed34e6fa2f83062451bdadd753a9140d53d424",
+      "reason": "model draw state setter/getter fromordinaryactor path"
+    },
+    {
+      "space": "arm9",
+      "start": 34311672,
+      "end": 34311892,
+      "bytes": 220,
+      "sha256": "7b8c7dc65f5522a613581bcd61ca27a55d365b0050d0c27f21bbcd3e26814f4a",
+      "reason": "actual source material alpha writer reached byactor state"
+    },
+    {
+      "space": "arm9",
+      "start": 34076684,
+      "end": 34076852,
+      "bytes": 168,
+      "sha256": "73bfaf89762d0d846990302bcfd999afd877eb34a5a0beddc66ffefd37634c73",
+      "reason": "peractor flag source materialstate toggles"
+    },
+    {
+      "space": "arm9",
+      "start": 34311248,
+      "end": 34311336,
+      "bytes": 88,
+      "sha256": "81f1806399aeff9527ee3e7a95e52b95a4164bc62942d860f2d214e35acf7c28",
+      "reason": "permaterial alpha bitfield mutation"
+    },
+    {
+      "space": "arm9",
+      "start": 34311336,
+      "end": 34311460,
+      "bytes": 124,
+      "sha256": "7f669e5d4e5b02a0a3b79a1ae7bf102c2f23324434f7237fcca5d6c975822c5f",
+      "reason": "alpha writer bitmask and source record destination"
+    },
+    {
+      "space": "arm9",
+      "start": 33779264,
+      "end": 33779424,
+      "bytes": 160,
+      "sha256": "9b81ad4adc13ef545a60c1979c361ea2419fecc16aa15f43dda200d22d5dbdcd",
+      "reason": "adjacent actor eligibility and alpha setters"
+    },
+    {
+      "space": "arm9",
+      "start": 34044328,
+      "end": 34044680,
+      "bytes": 352,
+      "sha256": "9ef6cb4922f3a9def8cb28d3a55be5033d4a05cf3bc512ca6fd9a9b4542cdddc",
+      "reason": "natural actor reset/init sourcecall context"
+    },
+    {
+      "space": "arm9",
+      "start": 33761680,
+      "end": 33762068,
+      "bytes": 388,
+      "sha256": "d9c75abf4f47641d0b013c9070f092785755862935154b31bfb253095e33e4cd",
+      "reason": "base actor initializer reached bynatural reset"
+    },
+    {
+      "space": "arm9",
+      "start": 33768992,
+      "end": 33769680,
+      "bytes": 688,
+      "sha256": "803ad64e1b2180620cca6f36f9385cd1f9900e2a18bc6d9a4b8361ff40bb8dff",
+      "reason": "common actor initialization ofalpha source fields"
+    },
+    {
+      "space": "arm9",
+      "start": 33772580,
+      "end": 33772680,
+      "bytes": 100,
+      "sha256": "323462763595e43483acabb7443704432b64ed600f852bf2f46dd00d5ac26d00",
+      "reason": "direct actor draw eligibility preceding alpha consumer"
+    },
+    {
+      "space": "arm9",
+      "start": 33762788,
+      "end": 33762880,
+      "bytes": 92,
+      "sha256": "f5cb486e0e0dcffe2276f56f682dee63ecca49c7a09abff5a3be0c4308bc0d3c",
+      "reason": "direct base update reaches alpha-factor updater"
+    },
+    {
+      "space": "arm9",
+      "start": 33763120,
+      "end": 33763268,
+      "bytes": 148,
+      "sha256": "3cfb01843fe3f462d6cd7158f1c24659a95abafe92f515565a6411104d22818c",
+      "reason": "base update common tail and direct alpha updater call"
+    }
+  ],
+  "privateDisassemblySHA256": "2f1c5c79424e378d637d783937e2863adb9910a37eb3e2c56af7b1ea9df6f5bb",
+  "llvmLibrarySHA256": "3523f50f635d2a1ea47518a392451f2854b92823ceaf1345fb806099dd1a3b8a",
+  "linearDisassemblyIsNotWholeProgramProof": true,
+  "gameCodeExecuted": false
+}
