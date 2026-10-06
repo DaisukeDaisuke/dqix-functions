@@ -1,0 +1,100 @@
+{
+  "kind": "natural-field-phase-input-source-ranges",
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "ranges": [
+    {
+      "space": "arm9",
+      "start": 33770240,
+      "end": 33771520,
+      "bytes": 1280,
+      "sha256": "342d03141ca6f6ecc2daa02e6ebbca59e1255246f6eb0afae856b9113d7f4c8b"
+    },
+    {
+      "space": "arm9",
+      "start": 33762788,
+      "end": 33763584,
+      "bytes": 796,
+      "sha256": "a566aa926204a2721c1490b87713920c32c1f8e6d554eb4c6782427b018fd2b7"
+    },
+    {
+      "space": "arm9",
+      "start": 33768992,
+      "end": 33769824,
+      "bytes": 832,
+      "sha256": "7ee44d4586f16b2cca0b29f9a1f42b8bbe4c34ccb90aed9d9d9d32ea9a931031"
+    },
+    {
+      "space": "arm9",
+      "start": 33761680,
+      "end": 33761792,
+      "bytes": 112,
+      "sha256": "04ebbe29730b92434772c1453b25f1f31dcb6884c840fa0cafd68f3793513e9c"
+    },
+    {
+      "space": "overlay17",
+      "start": 35181344,
+      "end": 35181720,
+      "bytes": 376,
+      "sha256": "b83c4b0dd1c7f85fd9c13aebec7d8d83d39e700fc3eb04471994ab375febb3f5"
+    },
+    {
+      "space": "arm9",
+      "start": 33616384,
+      "end": 33616640,
+      "bytes": 256,
+      "sha256": "4f269f69b628650d930b3dca5b1435dbc9dd0dcdba14690c6d7256c4ec2f9e8a"
+    },
+    {
+      "space": "arm9",
+      "start": 33618944,
+      "end": 33620288,
+      "bytes": 1344,
+      "sha256": "b7ef8893c258521ea7a8d160380ba2371999752cbeebc2ac89064b262a7d430d"
+    },
+    {
+      "space": "arm9",
+      "start": 33766912,
+      "end": 33768992,
+      "bytes": 2080,
+      "sha256": "8648e7b0bf7cb854baee88f236f97e60bea67bdc68a9dbad0d3b8dc76ef9ce80"
+    },
+    {
+      "space": "arm9",
+      "start": 33777664,
+      "end": 33778964,
+      "bytes": 1300,
+      "sha256": "c6cf846fc8b45689109833d95142db0bdcddb5d2ef96a503d84130f359457e51"
+    },
+    {
+      "space": "arm9",
+      "start": 33779808,
+      "end": 33779888,
+      "bytes": 80,
+      "sha256": "57356a1220c4a2764cd0303980b7fcfdc828dba669eccae049b47ebf8849191f"
+    },
+    {
+      "space": "arm9",
+      "start": 34535896,
+      "end": 34535912,
+      "bytes": 16,
+      "sha256": "8ae6168e6c47aeabdabbf22ecdd49cd8185e4ece0999246d3f04d6ffc5d5caea"
+    },
+    {
+      "space": "arm9",
+      "start": 34044532,
+      "end": 34044576,
+      "bytes": 44,
+      "sha256": "5848f0a7b86e3ae8809b6677f8ce38f4888ff27444ee5269488421a8b95129c3"
+    },
+    {
+      "space": "arm9",
+      "start": 33764608,
+      "end": 33765856,
+      "bytes": 1248,
+      "sha256": "746255dc22000e8ff4470a5d66987baa897be32de38b159035946be8e2983827"
+    }
+  ],
+  "decoderLibrarySHA256": "3523f50f635d2a1ea47518a392451f2854b92823ceaf1345fb806099dd1a3b8a",
+  "rawBytesOrInstructionsIncluded": false,
+  "sourceAnnotation": "natural-field-phase-inputs-20261006.md"
+}
