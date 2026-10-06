@@ -1,0 +1,45 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "ranges": [
+    {
+      "space": "arm9",
+      "start": "0x2048374",
+      "endExclusive": "0x20486dc",
+      "bytes": 872,
+      "sha256": "4abff609640bea2e59e9083d7e6346bdb6424176b8088fd115ecbe1e1e74e937",
+      "purpose": "direct ID0 draw and loaded cell texture consumer"
+    },
+    {
+      "space": "arm9",
+      "start": "0x204806c",
+      "endExclusive": "0x2048374",
+      "bytes": 776,
+      "sha256": "fe98b5d5455e80cd61105c5b78a160c3c5674064a4e0df4adb2a10a18c7c0c61",
+      "purpose": "direct loaded-object update and layout/frame selection"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20486dc",
+      "endExclusive": "0x2048960",
+      "bytes": 644,
+      "sha256": "a337fd16dc0fdbc44ad64410b1889aca9ee981c4f4d0d51585c80ec0f92147b4",
+      "purpose": "direct loaded-object layout setters before source loader"
+    }
+  ],
+  "nativeTextureComponent": {
+    "path": "integrate-field-source-428ee55c/web/map-browser-preview/native/native-texture-unpack.mjs",
+    "bytes": 2381,
+    "sha256": "484481cb165796909f2205ec256d6255b10ce6272431f0b1de3e1ac58a2f8d0d"
+  },
+  "nativeTextureParameterComponent": {
+    "path": "integrate-field-source-428ee55c/web/map-browser-preview/native/native-tex0.mjs",
+    "bytes": 3160,
+    "sha256": "2c65bf2b7f67800b3df20c3661cf73ed785219ac6b46e20e5fa2a6639e353764"
+  },
+  "structuralReader": {
+    "path": "retain-local-patch-failures-4d72ddf1/trace-command-sprite-312fcd7c-7d6f-4092-b4eb-2bdd4640e563/stage-v2/web/rom-sprite-source.mjs",
+    "bytes": 5025,
+    "sha256": "537d6b4edb681d7a8be0fd422898fdb7caceebeb21e2f35c6a7c361968bbb724"
+  },
+  "rawSourceBytesIncluded": false
+}

@@ -1,0 +1,63 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "sourceCommit": "a3792bcca6c2e89590a6fee5313e0cece9974050",
+  "ranges": [
+    {
+      "space": "overlay17",
+      "start": "0x219b910",
+      "endExclusive": "0x219bb38",
+      "bytes": 552,
+      "sha256": "59461ccac21438e985537dd4fe798ae23bfb5d91b4a0d91bf8ced5eb12e9bf35",
+      "purpose": "exact ID0 caller prologue/projection-state setup"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x2196c80",
+      "endExclusive": "0x2196e30",
+      "bytes": 432,
+      "sha256": "b2f33f89e73a48e3023fd5f1015197c7a6ddf1ae9cd7e7ede77d9f29bb3b60fc",
+      "purpose": "direct caller ofID0 pass and its matrix setup"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x2196f30",
+      "endExclusive": "0x2196f50",
+      "bytes": 32,
+      "sha256": "8afa9b5de57540ad5c7b4365afe69c3524a594d584233fd472724567025d2c6c",
+      "purpose": "UI setup vector/register literal pool"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20c723c",
+      "endExclusive": "0x20c7350",
+      "bytes": 276,
+      "sha256": "3645014827411155b8db3abfb54ec52b4b0061e4e281b2e57f7a75dba1bc1fb1",
+      "purpose": "UI projection/lookat wrapper callees"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x21d6858",
+      "endExclusive": "0x21d6870",
+      "bytes": 24,
+      "sha256": "06f4d02b7b41bdcdfe3097c2af197eda9710a59b2a05fde8f022f54caf1d0934",
+      "purpose": "source look-at vectors"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20c44b8",
+      "endExclusive": "0x20c46b0",
+      "bytes": 504,
+      "sha256": "08e10f62f5872e7304ab75bd894145b3a5438e70a0095c6902079cca0b3218cf",
+      "purpose": "source orthographic fixed projection builder"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x21a45a4",
+      "endExclusive": "0x21a4650",
+      "bytes": 172,
+      "sha256": "a82a2cbf851d2652dd0975a5eea5a804d86ace4a55850ddb1de185c6958872fd",
+      "purpose": "intervening UI-state draw call beforeID0"
+    }
+  ],
+  "rawBytesIncluded": false
+}

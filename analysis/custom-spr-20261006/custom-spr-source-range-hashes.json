@@ -1,0 +1,96 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "sourceRevision": "a3792bcca6c2e89590a6fee5313e0cece9974050",
+  "ranges": [
+    {
+      "space": "overlay17",
+      "start": "0x21d6980",
+      "endExclusive": "0x21d6aa0",
+      "bytes": 288,
+      "sha256": "a1a33a9e473b9c22e02692cab7ef47aae9df4699415919147c5866117072c920",
+      "purpose": "bounded filename table context"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x21d7880",
+      "endExclusive": "0x21d7950",
+      "bytes": 208,
+      "sha256": "5d01f19aa8227eb5548b00d8a458bd0b6145940c2c822aa2cdd7b1bd0e334edb",
+      "purpose": "exact known filename string context"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x219c080",
+      "endExclusive": "0x219c420",
+      "bytes": 928,
+      "sha256": "4cdd2c0dc01a945b910a16f03e6d0739fc6d297f3498ec3b6684a13166d3cdb2",
+      "purpose": "consumer context around literal0x0219c418"
+    },
+    {
+      "space": "arm9",
+      "start": "0x2048960",
+      "endExclusive": "0x2048e00",
+      "bytes": 1184,
+      "sha256": "b75abc6a759e339a94e980c251df442e64d5ceda903831fc7eed5cda0911a3bc",
+      "purpose": "sprite source loader called by exact table loop"
+    },
+    {
+      "space": "arm9",
+      "start": "0x2047fbc",
+      "endExclusive": "0x2048080",
+      "bytes": 196,
+      "sha256": "4ec539f451e425aaf22c2a11ccc498fe39e4a2079cb9a6bb1c34553595e75a7e",
+      "purpose": "sprite destination initializer"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x21d7960",
+      "endExclusive": "0x21d79c0",
+      "bytes": 96,
+      "sha256": "6f5ef4cfc73dfb5b0b326daa07b30e0d86fcca85966e4254b3e7f17d17f11889",
+      "purpose": "exact table consumer filename literals"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x219bb00",
+      "endExclusive": "0x219bdc0",
+      "bytes": 704,
+      "sha256": "df4a4d1651c258d8098d1da3b4fcee98cf7b2db8b46407ba665814df194ae9ba",
+      "purpose": "wing0 offset consumers and placement calls"
+    },
+    {
+      "space": "overlay17",
+      "start": "0x219b610",
+      "endExclusive": "0x219b710",
+      "bytes": 256,
+      "sha256": "35083ba6c9f5144e78e381d74c210d0f50a2b56ab4151ddcc7d57c3f6bf7b51a",
+      "purpose": "wing0 object accessor context"
+    },
+    {
+      "space": "arm9",
+      "start": "0x2048e00",
+      "endExclusive": "0x2048f70",
+      "bytes": 368,
+      "sha256": "65cd7e4dcf4bed3e155963470a780744b8c01772fa9cefdfc87eb4e06671f044",
+      "purpose": "palette upload and layout allocation tails"
+    },
+    {
+      "space": "arm9",
+      "start": "0x200195c",
+      "endExclusive": "0x20019c8",
+      "bytes": 108,
+      "sha256": "0dd2b2c1d30253aa4902b891be7cdb5c82af2f1c2392611d9889b17c4b484b77",
+      "purpose": "source byte-copy helper"
+    },
+    {
+      "space": "arm9",
+      "start": "0x2039ec4",
+      "endExclusive": "0x2039f24",
+      "bytes": 96,
+      "sha256": "b3cad83d39ab0d43562a734a27447490b0151ee4f49ec7a13b13b9fdbb2aa859",
+      "purpose": "direct placement setter called for wing0"
+    }
+  ],
+  "rawBytesIncluded": false,
+  "nativeExecution": false
+}

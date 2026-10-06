@@ -1,0 +1,77 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "sourceCommit": "a3792bcca6c2e89590a6fee5313e0cece9974050",
+  "priorRangeManifest": {
+    "path": "retain-local-patch-failures-4d72ddf1/trace-command-sprite-312fcd7c-7d6f-4092-b4eb-2bdd4640e563/RANGE_MANIFEST.json",
+    "bytes": 4861,
+    "sha256": "75675916fe211d0ac659619b9e70ee9acb2cc139ddd572e1d826e14d75ab22e1"
+  },
+  "ranges": [
+    {
+      "space": "arm9",
+      "start": "0x20ddae8",
+      "endExclusive": "0x20ddd00",
+      "bytes": 536,
+      "sha256": "c09005882295c6e27cd6cc1048b3ea01d792dc3f2c419943e4de87c75c83aa9f",
+      "purpose": "close transfer-vs-allocation units for palette helper02048d90"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20bd298",
+      "endExclusive": "0x20bd400",
+      "bytes": 360,
+      "sha256": "61c2f4b75c375bc01d1cc201527c9a41692d7c3d8d85483d973099db9bebab60",
+      "purpose": "palette allocation unit and return packing"
+    },
+    {
+      "space": "arm9",
+      "start": "0x1ff8b54",
+      "endExclusive": "0x1ff8d70",
+      "bytes": 540,
+      "sha256": "d7a0959e88f7ee1497d06015ba88fe61b8b23742fcfceb6651267c5927b215b5",
+      "purpose": "actual transfer queue argument and length semantics"
+    },
+    {
+      "space": "arm9",
+      "start": "0x1ff8d70",
+      "endExclusive": "0x1ff8e4c",
+      "bytes": 220,
+      "sha256": "e823732c56622531ca0d83b8057328442f00ccf99567a730e2daf24e1fbd7d06",
+      "purpose": "transfer queue size storage and dispatch literals"
+    },
+    {
+      "space": "arm9",
+      "start": "0x1ff8750",
+      "endExclusive": "0x1ff8758",
+      "bytes": 8,
+      "sha256": "f9d937fc10399d842fab6cdeebb4c83646ba336e02cdc9dd7ce96acc7bd05622",
+      "purpose": "dispatch table entries0/1"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20c8188",
+      "endExclusive": "0x20c81f4",
+      "bytes": 108,
+      "sha256": "82f9c8d8df274ffcf9b860c6c5088ca7669845bd9ddfc8b1375773c2e5d34d06",
+      "purpose": "type0 immediate transfer implementation"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20cbed4",
+      "endExclusive": "0x20cbf30",
+      "bytes": 92,
+      "sha256": "ca910aca7d9da7d095f1400f3d088ccf96066cc3cf25194232cb873a3d85bc35",
+      "purpose": "type0 CPU-copy byte-count handling"
+    },
+    {
+      "space": "arm9",
+      "start": "0x20cb8f8",
+      "endExclusive": "0x20cba10",
+      "bytes": 280,
+      "sha256": "375d199ad6c839745caee52c60977318c4c41f20d83b0d0042023b4e4253d879",
+      "purpose": "type0 DMA count-unit handling"
+    }
+  ],
+  "rawSourceBytesIncluded": false,
+  "actualVideoTransferObserved": false
+}
