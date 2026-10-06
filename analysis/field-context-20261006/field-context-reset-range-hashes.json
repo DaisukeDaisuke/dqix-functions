@@ -1,0 +1,170 @@
+{
+  "ROM": "YDQJ revision0",
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "sourceReadersCommit": "e6299284b06c6702e6a37de3d35e98fc7fd6cb15",
+  "ranges": [
+    {
+      "label": "reset",
+      "space": "arm9",
+      "start": "0x202821c",
+      "endExclusive": "0x20282ac",
+      "bytes": 144,
+      "sha256": "da24c1362a475f1349fb63e87cc73c307ab5b54d4a68f2e81a3fa461e8f17aed"
+    },
+    {
+      "label": "allocate-field-pool",
+      "space": "arm9",
+      "start": "0x20282ac",
+      "endExclusive": "0x20283fc",
+      "bytes": 336,
+      "sha256": "0dbb73329ef0260fcf4315b36e059d4859bad705d3477b170b33b78a20b409b3"
+    },
+    {
+      "label": "cleanup-dispatch",
+      "space": "arm9",
+      "start": "0x2028138",
+      "endExclusive": "0x202821c",
+      "bytes": 228,
+      "sha256": "b97791b05aeaf81221039ba79c3be6d87d34e4962a14bed8a61d7eada69a4c9f"
+    },
+    {
+      "label": "graph-reset",
+      "space": "arm9",
+      "start": "0x202791c",
+      "endExclusive": "0x2027964",
+      "bytes": 72,
+      "sha256": "eaced2ea24806a396f1340c5aa52bd02312cea9f02d9bd27d91a2e9d6f9cd677"
+    },
+    {
+      "label": "species-count-reset",
+      "space": "arm9",
+      "start": "0x209dd74",
+      "endExclusive": "0x209dd80",
+      "bytes": 12,
+      "sha256": "33e9254ceaefdb13efe99f64a46200343c4f24333f7f2cd75d9e1b88f02e4562"
+    },
+    {
+      "label": "table-reset",
+      "space": "arm9",
+      "start": "0x209d9fc",
+      "endExclusive": "0x209da10",
+      "bytes": 20,
+      "sha256": "6dc3e668d159cb44db2a07db05f3a1c2c9c1606cb5902330e5b6f059627a009a"
+    },
+    {
+      "label": "other-container-reset",
+      "space": "arm9",
+      "start": "0x209ccac",
+      "endExclusive": "0x209ccd0",
+      "bytes": 36,
+      "sha256": "ee085e653199dca1412ce139a97ce020cbd601cf6dbbb2135637e9c7d3a14478"
+    },
+    {
+      "label": "model-container-reset",
+      "space": "arm9",
+      "start": "0x2070114",
+      "endExclusive": "0x2070128",
+      "bytes": 20,
+      "sha256": "a76f3d3bb16718e0524897ff4caa0372bc99dcf24881be81c1834aee88d10c70"
+    },
+    {
+      "label": "AI-list-reset",
+      "space": "arm9",
+      "start": "0x206ffb4",
+      "endExclusive": "0x206ffc4",
+      "bytes": 16,
+      "sha256": "ebbe5023693381929b378f1087cbdbc0c8fbd9af86eb3ec996ae939e6f871c9d"
+    },
+    {
+      "label": "aux-container-reset",
+      "space": "arm9",
+      "start": "0x20aac0c",
+      "endExclusive": "0x20aac20",
+      "bytes": 20,
+      "sha256": "a76f3d3bb16718e0524897ff4caa0372bc99dcf24881be81c1834aee88d10c70"
+    },
+    {
+      "label": "byte-fill-wrapper",
+      "space": "arm9",
+      "start": "0x20019c8",
+      "endExclusive": "0x20019dc",
+      "bytes": 20,
+      "sha256": "31db5fe905675ccf481c8ff73c6fb047b944542ecc7f69e45e373c46040e3965"
+    },
+    {
+      "label": "byte-fill",
+      "space": "arm9",
+      "start": "0x2001a48",
+      "endExclusive": "0x2001af8",
+      "bytes": 176,
+      "sha256": "4f79f6c98befaa40b29e54453b095b3280b0464219a9c6d7dcfa14ff6eb094c6"
+    },
+    {
+      "label": "graph-active-loader",
+      "space": "overlay17",
+      "start": "0x21b507c",
+      "endExclusive": "0x21b5178",
+      "bytes": 252,
+      "sha256": "6c00182ca613180419ea0b325eb83a376993553be0c425b71b331d955cde3564"
+    },
+    {
+      "label": "loader-task-init",
+      "space": "overlay17",
+      "start": "0x21b4dcc",
+      "endExclusive": "0x21b4e00",
+      "bytes": 52,
+      "sha256": "895fd98f994eac46f16387a8e384281a2a3ba8b50f972dfbc18d9f73ceb7e8c0"
+    },
+    {
+      "label": "loader-state-dispatch",
+      "space": "overlay17",
+      "start": "0x21b4e00",
+      "endExclusive": "0x21b4e50",
+      "bytes": 80,
+      "sha256": "cc3fda54bc8a84dae33f0012a92c2942e23c8be5821e87ffec902f48dd3ad216"
+    },
+    {
+      "label": "loader-state-table",
+      "space": "overlay17",
+      "start": "0x21d6fd0",
+      "endExclusive": "0x21d6ff4",
+      "bytes": 36,
+      "sha256": "9e33b56640aedc334b398b6b87ed684cabb0711ada86b8b5c693eb242f8a4f98"
+    },
+    {
+      "label": "initialize-four-field-contexts",
+      "space": "arm9",
+      "start": "0x2028020",
+      "endExclusive": "0x20280fc",
+      "bytes": 220,
+      "sha256": "90bf63ed1cff7654a5c370d72edba96e6c3ff520dfbcffa3bf50def2a0e2508e"
+    },
+    {
+      "label": "bind-four-field-allocators",
+      "space": "arm9",
+      "start": "0x20280fc",
+      "endExclusive": "0x2028138",
+      "bytes": 60,
+      "sha256": "168f873f5a77d85e18e7590fb76113c8d24616be7f9de61f2dea1a4c195f3092"
+    },
+    {
+      "label": "loader-state8",
+      "space": "overlay17",
+      "start": "0x21b5a0c",
+      "endExclusive": "0x21b5bfc",
+      "bytes": 496,
+      "sha256": "0928a3bec3c07fe259a2fd84765661cedcd412f123f519e1f26173d9d7732e35"
+    },
+    {
+      "label": "loader-completion",
+      "space": "overlay17",
+      "start": "0x21b5bfc",
+      "endExclusive": "0x21b5db0",
+      "bytes": 436,
+      "sha256": "49f97ce661960e62015e82fc96c5d42e0fe4e21a0a24b88f85b7b5ebbe10b747"
+    }
+  ],
+  "noLiveMemory": true,
+  "noNativeExecution": true,
+  "rawBytesIncluded": false
+}
