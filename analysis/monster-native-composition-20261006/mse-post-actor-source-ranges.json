@@ -1,0 +1,56 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "ranges": [
+    {
+      "space": "overlay17",
+      "start": 35219332,
+      "end": 35220112,
+      "bytes": 780,
+      "sha256": "6f27e67eb545bd36723d4560f74c00cb3158c4a53fe579ff6f2f0ac71afd299c",
+      "reason": "existing guarded ordinary field map/actor submission function"
+    },
+    {
+      "space": "overlay17",
+      "start": 35221136,
+      "end": 35221344,
+      "bytes": 208,
+      "sha256": "8bb202e8b5c364967719bb421441e55357bb01192c1b6363befc7712008264b9",
+      "reason": "documented MSE draw call context02196f20"
+    },
+    {
+      "space": "overlay17",
+      "start": 35219008,
+      "end": 35219332,
+      "bytes": 324,
+      "sha256": "3c7518fce31d21ebcde8a21232a7cad311e52b541c4fc2048187568874083a98",
+      "reason": "two exact BL callers enclosing world then UI/MSE pass"
+    },
+    {
+      "space": "overlay17",
+      "start": 35220608,
+      "end": 35221296,
+      "bytes": 688,
+      "sha256": "bc4784830d0ad66aac6d512a26f58e2e7f919fe910c85f945cb5764790b0b79b",
+      "reason": "documented UI/MSE pass from prologue through direct effect call"
+    },
+    {
+      "space": "overlay17",
+      "start": 35218868,
+      "end": 35219008,
+      "bytes": 140,
+      "sha256": "21d775d714e334f6a811821ba596ed8af88819f0bd8b6c2eacc2357d7f743d20",
+      "reason": "field draw wrapper prologue and camera-reset predecessor"
+    },
+    {
+      "space": "arm9",
+      "start": 34060944,
+      "end": 34061112,
+      "bytes": 168,
+      "sha256": "605791a9efb31a4080ac26913d0613d3bbe921f3a5a91e42e0b7e349841efa65",
+      "reason": "MSE draw entry gate and source view setup"
+    }
+  ],
+  "privateDisassemblySHA256": "b2e598beeb4ea0e04e19e8e92af5a9aa81a5e56979b11afceaa7227ec0588556",
+  "llvmLibrarySHA256": "3523f50f635d2a1ea47518a392451f2854b92823ceaf1345fb806099dd1a3b8a",
+  "runtimeStateUsed": false
+}
