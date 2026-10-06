@@ -1,0 +1,148 @@
+{
+  "romSHA256": "3c9d809eb8e446b0da6a9b383c7a6c5146001636038384aa49cb1a2e367546d7",
+  "verification": "ROM static confirmation only; no game instructions executed",
+  "ranges": [
+    {
+      "space": "arm9",
+      "start": 33771944,
+      "end": 33772580,
+      "bytes": 636,
+      "sha256": "4f330f7bdbe87ecee4920dbb5a6661e56baccd33fc62b163e8f6ca0ecdecefb9",
+      "observedDirectCaller": 33772920
+    },
+    {
+      "space": "arm9",
+      "start": 33774172,
+      "end": 33774304,
+      "bytes": 132,
+      "sha256": "3d2e71f56f630b02115a886756307e3340e7b6526f06b92bc6c774a34ffed7c7",
+      "observedDirectCaller": 33772896
+    },
+    {
+      "space": "arm9",
+      "start": 33754408,
+      "end": 33754612,
+      "bytes": 204,
+      "sha256": "3c946e3703c0563261c080dd7e7e811787fc9160620a84b482207b0e404f016a",
+      "observedDirectCaller": 33774260
+    },
+    {
+      "space": "arm9",
+      "start": 34296604,
+      "end": 34296700,
+      "bytes": 96,
+      "sha256": "210308ee488d5f5cf3856205334b4a19b83cb5cd50e7856acd4fa6e9f8c37b6b",
+      "observedDirectCaller": 33772264
+    },
+    {
+      "space": "arm9",
+      "start": 33753192,
+      "end": 33753444,
+      "bytes": 252,
+      "sha256": "4a61d82485ba08354dcbb36ee8c4f0731b286a5d582efbd706e8db984be5f68c",
+      "observedDirectCaller": 33754428
+    },
+    {
+      "space": "arm9",
+      "start": 34296544,
+      "end": 34296604,
+      "bytes": 60,
+      "sha256": "ff56485bd2b3ae15e3e0c0ab2783060f9743cdf008d0761e95af0e79f0265fbd",
+      "observedDirectCaller": 33772924
+    },
+    {
+      "space": "arm9",
+      "start": 33780240,
+      "end": 33780256,
+      "bytes": 16,
+      "sha256": "a983ad987ecfbf4887715e494fcbcb305f1f9f9bbecc0529a5e0e179b2e7d8b9",
+      "observedDirectCaller": 33762240
+    },
+    {
+      "space": "arm9",
+      "start": 33634592,
+      "end": 33634620,
+      "bytes": 28,
+      "sha256": "61fa5af1cad3a614e3090f956a517f663ae7c5d5aceb499b27dafc23f5200101",
+      "observedDirectCaller": 33762760
+    },
+    {
+      "space": "arm9",
+      "instructionSet": "thumb",
+      "start": 34354280,
+      "end": 34354328,
+      "bytes": 48,
+      "sha256": "ed2a6ac2a5df325e5275932d193d17877e04ed5c0d1938776dc258cdb58cf422",
+      "observedDirectCaller": 33753324
+    },
+    {
+      "space": "arm9",
+      "instructionSet": "thumb",
+      "start": 34352460,
+      "end": 34352488,
+      "bytes": 28,
+      "sha256": "f2909671f3fa927b0e9b6a32f865d7d34ec31619ceb15a2e3ce3a2f90e54a942",
+      "observedDirectCaller": 33771920
+    }
+  ],
+  "reusedRanges": [
+    {
+      "start": 33761680,
+      "end": 33762068,
+      "bytes": 388,
+      "sha256": "d9c75abf4f47641d0b013c9070f092785755862935154b31bfb253095e33e4cd",
+      "formalROMBytesEqual": true
+    },
+    {
+      "start": 33762068,
+      "end": 33762352,
+      "bytes": 284,
+      "sha256": "f9f293a5b579196dae343b8e5c80cefceb0f8fcb8f816d1b21572a9db369fb44",
+      "formalROMBytesEqual": true
+    },
+    {
+      "start": 33762348,
+      "end": 33762848,
+      "bytes": 500,
+      "sha256": "b7da64a8bdc58b6119d1ae851f7cc4dc8e98989de1b062b0efd7a116f4e64ce8",
+      "formalROMBytesEqual": true
+    },
+    {
+      "start": 33768992,
+      "end": 33769680,
+      "bytes": 688,
+      "sha256": "803ad64e1b2180620cca6f36f9385cd1f9900e2a18bc6d9a4b8361ff40bb8dff",
+      "formalROMBytesEqual": true
+    },
+    {
+      "start": 33772680,
+      "end": 33773360,
+      "bytes": 680,
+      "sha256": "1a1b80191e0f1be6f1b1634144087c0cda50ff62a1316e7b6540e55d633fe93f",
+      "formalROMBytesEqual": true
+    },
+    {
+      "start": 34044328,
+      "end": 34044680,
+      "bytes": 352,
+      "sha256": "9ef6cb4922f3a9def8cb28d3a55be5033d4a05cf3bc512ca6fd9a9b4542cdddc",
+      "formalROMBytesEqual": true
+    }
+  ],
+  "rotationDispatchTable": {
+    "address": 34535884,
+    "bytes": 12,
+    "sha256": "df27e1dd474f61123c1478cea8c9e67c35fd2f567288ef74c7347ae8b48386f2",
+    "functionPointers": [
+      33771932,
+      33771920,
+      33771908
+    ],
+    "scope": "ROM initial values; flag0x2000000 mutates ordering during actor draw"
+  },
+  "groundWrapper": {
+    "start": 35206928,
+    "bytes": 1836,
+    "sha256": "73a5b4ac192b7355dfc6b37b656ae14d5e99bb77f972d49d5b178c51c2cc79f9"
+  }
+}
